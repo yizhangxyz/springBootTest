@@ -3,45 +3,53 @@ package game.SpringBoot.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-//@RestController
-@Controller
+@RestController
+//@Controller
 public class TestController
 {
-	static public class Person {
+	static public class Person
+	{
 	    private String name;
 	    private Integer age;
 
-	    public Person() {
+	    public Person() 
+	    {
 	    }
 
-	    public Person(String name, Integer age) {
+	    public Person(String name, Integer age)
+	    {
 	        this.name = name;
 	        this.age = age;
 	    }
 
-	    public String getName() {
+	    public String getName() 
+	    {
 	        return name;
 	    }
 
-	    public void setName(String name) {
+	    public void setName(String name)
+	    {
 	        this.name = name;
 	    }
 
-	    public Integer getAge() {
+	    public Integer getAge() 
+	    {
 	        return age;
 	    }
 
-	    public void setAge(Integer age) {
+	    public void setAge(Integer age) 
+	    {
 	        this.age = age;
 	    }
 	}
 	
 	@RequestMapping("/home")
-    public String homePage(Model model){
+    public String homePage(Model model)
+	{
 		Person single = new Person("aa", 11);
         List<Person> people = new ArrayList<>();
         Person p1 = new Person("zhang1", 11);
@@ -55,8 +63,9 @@ public class TestController
         return "homepage";       
     }
 	
-	@RequestMapping("/show")
-    public String show(){
-        return "test";        
+	@RequestMapping("/test")
+    public String test()
+	{
+		return "test";     
     }
 }

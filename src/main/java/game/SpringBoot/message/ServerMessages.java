@@ -2,6 +2,12 @@ package game.SpringBoot.message;
 
 public class ServerMessages
 {
+	//登录验证userToken把
+	public static class RequestValidate
+	{
+		public String userToken;     //用户的每个请求都会带上 
+	}
+	
 	//用code获取用户数据失败
 	public static class LoginFailed
 	{
@@ -15,4 +21,5 @@ public class ServerMessages
 		public String session_key;   //微信针对这个用户的sessionId
 		public String openid;        //每个账号每次登录都是唯一的
 	}
+	
 }

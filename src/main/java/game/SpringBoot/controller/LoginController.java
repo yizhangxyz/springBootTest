@@ -1,7 +1,8 @@
 package game.SpringBoot.controller;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 
 import game.SpringBoot.httpUtils.MyHttpClient;
+import game.SpringBoot.manager.UserManager;
 import game.SpringBoot.message.ClientMessages.ErrorRsp;
 import game.SpringBoot.message.ClientMessages.LoginCodeReq;
 import game.SpringBoot.message.ServerMessages.LoginFailed;
 import game.SpringBoot.message.ServerMessages.LoginSuccess;
+import game.SpringBoot.model.UserInfo;
 import game.SpringBoot.tools.LogUtils;
 import game.SpringBoot.tools.PropertiesConfig;
 
@@ -23,7 +26,7 @@ public class LoginController
 {
 	
 	@PostMapping("/login")
-    public @ResponseBody String login(HttpServletRequest request, HttpSession session)
+    public @ResponseBody String login(HttpServletRequest request)
 	{
 		String postData = MyHttpClient.getPostData(request);
 		
@@ -50,6 +53,18 @@ public class LoginController
         }
         LoginSuccess successInfo = JSONObject.parseObject(ret, LoginSuccess.class);
         
+        String sessionId = generateSessionId();
+        
+        UserInfo userInfo = new UserInfo();
+        
+        userInfo.sessionId = sessionId;
+        userInfo.session_key = successInfo.session_key;
+        userInfo.openid = successInfo.openid;
+        userInfo.createTime = System.currentTimeMillis();
+        
+        
+        UserManager.getInstance().addUser(sessionId, userInfo);
+        
 		return ret;
     }
 	
@@ -57,6 +72,11 @@ public class LoginController
 	{
 		String url = "https://api.weixin.qq.com/sns/userinfo?access_token="+access_token +"&openid="+openid;
         return MyHttpClient.doGet(url);       
+	}
+	
+	private String generateSessionId()
+	{
+		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
 	
 }

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 public class MainController {
 
     @GetMapping("/")
-    public String index(@SessionAttribute(WebSecurityConfig.SESSION_KEY) String account, Model model)
+    public String index(@SessionAttribute(SecurityValidate.SESSION_KEY) String account, Model model)
     {
         model.addAttribute("name", account);
         return "index";
@@ -41,7 +41,7 @@ public class MainController {
             return map;
         }
 
-        session.setAttribute(WebSecurityConfig.SESSION_KEY, account);
+        session.setAttribute(SecurityValidate.SESSION_KEY, account);
 
         map.put("success", true);
         map.put("message", "登录成功");
@@ -52,7 +52,7 @@ public class MainController {
     public String logout(HttpSession session) 
     {
         // 移除session
-        session.removeAttribute(WebSecurityConfig.SESSION_KEY);
+        session.removeAttribute(SecurityValidate.SESSION_KEY);
         return "redirect:/loginView";
     }
 
