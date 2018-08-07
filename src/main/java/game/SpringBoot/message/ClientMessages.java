@@ -18,12 +18,6 @@ public class ClientMessages
 	//登录成功发送用户数据
 	public static class UserLoginRsp
 	{
-		public String unionid;
-		public String nickname;
-		public String headimgurl;
-		
-		public String openid;
-		public String accessToken;
-		public String refreshToken;
+		public String token;
 	} 
 }

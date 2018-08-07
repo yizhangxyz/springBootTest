@@ -47,7 +47,7 @@ public class UserManager
 			long currentTime = System.currentTimeMillis();
 			if(user.createTime - currentTime > UserAliveTime)
 			{
-				list.add(user.sessionId);
+				list.add(user.token);
 			}
 		}
 		for(String id : list)
@@ -56,14 +56,14 @@ public class UserManager
 		}
 	}
 	
-	public UserInfo getUser(String sessionId)
+	public UserInfo getUser(String token)
 	{
-		return userMap.get(sessionId);
+		return userMap.get(token);
 	}
 	
-	public void addUser(String sessionId, UserInfo userInfo)
+	public void addUser(String token, UserInfo userInfo)
 	{
-		userMap.put(sessionId, userInfo);
+		userMap.put(token, userInfo);
 	}
 	
 	public void removeUser(String sessionId)
