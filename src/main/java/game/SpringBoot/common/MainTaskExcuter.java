@@ -7,8 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import game.SpringBoot.tools.LogUtils;
-
 public final class MainTaskExcuter
 {
 	private static class MainTaskExcuterHolder

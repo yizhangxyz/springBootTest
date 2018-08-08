@@ -21,8 +21,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
-import game.SpringBoot.tools.LogUtils;
-
 public class MyHttpClient 
 {
 

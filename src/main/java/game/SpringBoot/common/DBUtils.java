@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
-import game.SpringBoot.tools.LogUtils;
-
 
 public class DBUtils {
     

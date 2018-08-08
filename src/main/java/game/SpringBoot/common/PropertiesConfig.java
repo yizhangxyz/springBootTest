@@ -1,4 +1,4 @@
-package game.SpringBoot.tools;
+package game.SpringBoot.common;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

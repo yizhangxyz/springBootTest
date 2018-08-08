@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 
 import game.SpringBoot.common.ErrorCode;
+import game.SpringBoot.common.LogUtils;
 import game.SpringBoot.common.MyHttpClient;
+import game.SpringBoot.common.PropertiesConfig;
 import game.SpringBoot.manager.UserManager;
 import game.SpringBoot.message.ClientMessages.ErrorRsp;
 import game.SpringBoot.message.ClientMessages.LoginCodeReq;
@@ -22,8 +24,6 @@ import game.SpringBoot.message.ServerMessages.LoginFailed;
 import game.SpringBoot.message.ServerMessages.LoginSuccess;
 import game.SpringBoot.model.UserInfo;
 import game.SpringBoot.services.UserService;
-import game.SpringBoot.tools.LogUtils;
-import game.SpringBoot.tools.PropertiesConfig;
 
 @RestController
 public class LoginController

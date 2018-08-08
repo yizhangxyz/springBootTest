@@ -1,4 +1,4 @@
-package game.SpringBoot.tools;
+package game.SpringBoot.common;
 
 
 import org.slf4j.Logger;
