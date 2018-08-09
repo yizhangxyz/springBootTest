@@ -20,23 +20,30 @@ public class DBUtils {
     
     private DBUtils(){}
     
-    static{
+    static
+    {
         URL = rb.getString("jdbc.url");
         USERNAME = rb.getString("jdbc.username");
         PASSWORD = rb.getString("jdbc.password");
         DRIVER = rb.getString("jdbc.driver");
-        try {
+        try
+        {
             Class.forName(DRIVER);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e)
+        {
             e.printStackTrace();
         }
     }
     
-    public static Connection getConnection(){
+    public static Connection getConnection()
+    {
         Connection conn = null;
-        try {
+        try 
+        {
             conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
             LogUtils.getLogger().info("获取数据库连接失败");
         }
@@ -44,12 +51,25 @@ public class DBUtils {
     }
     
     
-    public static void close(ResultSet rs,Statement stat,Connection conn){
-    	try {
-            if(rs!=null)rs.close();
-            if(stat!=null)stat.close();
-            if(conn!=null)conn.close();
-        } catch (SQLException e) {
+    public static void close(ResultSet rs,Statement stat,Connection conn)
+    {
+    	try 
+    	{
+            if(rs!=null)
+            {
+            	rs.close();
+            }	
+            if(stat!=null)
+            {
+            	stat.close();
+            }
+            if(conn!=null)
+            {
+            	conn.close();
+            }
+        } 
+    	catch (SQLException e)
+    	{
             e.printStackTrace();
         }
     }

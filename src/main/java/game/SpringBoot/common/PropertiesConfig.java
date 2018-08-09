@@ -1,50 +1,36 @@
 package game.SpringBoot.common;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class PropertiesConfig
 {
-	public static final String ServerConfig = "config.properties";
+	public static final String ServerConfig = "config";
+	private static ResourceBundle ServerConfigBundle;
 	
-	public static String readData(String filePath, String key)
+	static
+	{
+		ServerConfigBundle = ResourceBundle.getBundle(ServerConfig);
+	}
+	
+	public static String readData(String fileName, String key)
 	{  
-        filePath = PropertiesConfig.class.getResource("/" + filePath).toString();  
-        filePath = filePath.substring(6);  
-        
-        InputStream in = null;
-        try 
-        {  
-        	Properties props = new Properties();  
-        	
-            in = new BufferedInputStream(new FileInputStream(filePath));  
-            props.load(in);  
- 
-            return props.getProperty(key); 
-        } 
-        catch (Exception e)
-        {  
-            e.printStackTrace();  
-            return "";  
-        }  
-        finally 
-        {
-        	if(in != null)
-    		{
-    			 try
-				{
-					in.close();
-				}
-				catch (IOException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}  
-    		}
+		ResourceBundle bundle = null;
+		switch (fileName)
+	    {
+	    	case ServerConfig:
+	    		bundle = ServerConfigBundle;
+	       		break;
+
+	       	default:
+	       		break;
+	    }
+		
+		if(bundle != null)
+		{
+			return bundle.getString(key);
 		}
+		LogUtils.getLogger().info("readConfig failed fileName="+fileName+" key="+key);
+		return "";
     }  
 	
 	public static void main(String[] args)

@@ -3,10 +3,12 @@ package game.SpringBoot.services;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import game.SpringBoot.dao.UserDao;
 import game.SpringBoot.model.UserInfo;
 
+@Component
 public class UserService
 {
 	@Autowired
@@ -18,7 +20,7 @@ public class UserService
 	}
 	public void createOrUpdateUser(UserInfo userInfo) throws SQLException
 	{
-		userDao.add(userInfo);
+		userDao.createOrUpdateUser(userInfo);
 	}
 	
 	public UserInfo findByToken(String token) throws SQLException

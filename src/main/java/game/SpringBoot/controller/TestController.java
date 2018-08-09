@@ -62,10 +62,4 @@ public class TestController
         model.addAttribute("people", people);
         return "homepage";       
     }
-	
-	@RequestMapping("/test")
-    public String test()
-	{
-		return "test";     
-    }
 }
