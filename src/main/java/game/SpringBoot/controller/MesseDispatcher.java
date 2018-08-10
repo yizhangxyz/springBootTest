@@ -1,4 +1,4 @@
-package game.SpringBoot.common;
+package game.SpringBoot.controller;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

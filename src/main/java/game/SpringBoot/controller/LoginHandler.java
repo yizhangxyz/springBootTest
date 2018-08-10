@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONObject;
 
 import game.SpringBoot.common.LogUtils;
-import game.SpringBoot.common.MessageCode;
 import game.SpringBoot.common.MyHttpClient;
 import game.SpringBoot.common.PropertiesConfig;
 import game.SpringBoot.manager.UserManager;
 import game.SpringBoot.message.ClientMessages.ErrorRsp;
 import game.SpringBoot.message.ClientMessages.LoginMsgData;
 import game.SpringBoot.message.ClientMessages.UserLoginRsp;
+import game.SpringBoot.message.MessageCode;
 import game.SpringBoot.message.ServerMessages.LoginFailed;
 import game.SpringBoot.message.ServerMessages.LoginSuccess;
 import game.SpringBoot.model.UserInfo;

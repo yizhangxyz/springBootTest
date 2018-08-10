@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import org.springframework.stereotype.Component;
 
 import game.SpringBoot.common.DBUtils;
-import game.SpringBoot.common.MessageCode;
+import game.SpringBoot.message.MessageCode;
 import game.SpringBoot.model.UserInfo;
 
 

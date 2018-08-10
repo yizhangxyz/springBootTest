@@ -1,4 +1,4 @@
-package game.SpringBoot.common;
+package game.SpringBoot.maintask;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;

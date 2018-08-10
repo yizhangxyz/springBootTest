@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 
 import game.SpringBoot.common.LogUtils;
-import game.SpringBoot.common.MessageCode;
-import game.SpringBoot.common.MesseDispatcher;
-import game.SpringBoot.common.MesseDispatcher.MsgHandler;
 import game.SpringBoot.common.MyHttpClient;
+import game.SpringBoot.controller.MesseDispatcher.MsgHandler;
 import game.SpringBoot.message.ClientMessages;
 import game.SpringBoot.message.ClientMessages.ClientMessageHeader;
 import game.SpringBoot.message.ClientMessages.ErrorRsp;
+import game.SpringBoot.message.MessageCode;
 import game.SpringBoot.model.UserInfo;
 
 @RestController
@@ -47,21 +46,24 @@ public class UserController
 	@GetMapping("/test")
     public String test() 
     {
-		MsgHandler handler = messeDispatcher.getHandler(1);
-		if(handler != null)
-		{
-			return handler.invoke(null,"{\"code\":\"033Py3X80lCT5H1QuTX80kf6X80Py3XC\"}");
-		}
-		return "";
+		return testLogin();
     }
+	private String testLogin()
+	{
+		return onUserAction("{\"msg_id\":1,\"msg_data\":{\"code\":\"033Py3X80lCT5H1QuTX80kf6X80Py3XC\"}}");
+	}
 	
 	@PostMapping("/userAction")
     public @ResponseBody String userAction(HttpServletRequest request)
 	{
 		String postData = MyHttpClient.getPostData(request);
-		
 		LogUtils.getLogger().info("postData="+postData);
-		 
+		
+		return onUserAction(postData);
+    }
+	
+	private String onUserAction(String postData)
+	{
 		ClientMessageHeader message = JSONObject.parseObject(postData, ClientMessageHeader.class);
 		
 		if(message == null)
@@ -98,6 +100,5 @@ public class UserController
 		    	
 		    return JSONObject.toJSONString(rsp);
 		}
-		
-    }
+	}
 }

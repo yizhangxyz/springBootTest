@@ -1,5 +1,6 @@
-package game.SpringBoot.common;
+package game.SpringBoot.message;
 
+//消息码定义
 public class MessageCode
 {
 	public final static int SUCCESS      = 0;

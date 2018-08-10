@@ -1,4 +1,4 @@
-package game.SpringBoot.common;
+package game.SpringBoot.maintask;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;
@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import game.SpringBoot.common.LogUtils;
 
 public final class MainTaskExcuter
 {
