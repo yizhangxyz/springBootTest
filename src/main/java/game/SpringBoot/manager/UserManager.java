@@ -17,7 +17,8 @@ public class UserManager
 	
 	private Timer validateTimer = null;
 	
-	private static final long UserAliveTime = 60000*60*24*30;
+	//账号缓存时间
+	private static final long UserCacheTime = 60000*60*24*1;
 	
 	private ConcurrentHashMap<String, UserInfo> userMap = new ConcurrentHashMap<>();
 	
@@ -35,17 +36,18 @@ public class UserManager
 			{
 				UserManager.getInstance().checkUser();
 			}
-		}, 60000, 60000);
+		}, 5*60000, 5*60000);
 	}
 	
 	private void checkUser()
 	{
 		List<String> list = new ArrayList<String>();
 		
+		long currentTime = System.currentTimeMillis();
+		
 		for(UserInfo user : userMap.values())
-		{
-			long currentTime = System.currentTimeMillis();
-			if(user.createTime - currentTime > UserAliveTime)
+		{	
+			if(user.updateTime + UserCacheTime > currentTime)
 			{
 				list.add(user.token);
 			}
