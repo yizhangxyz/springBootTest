@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
+import game.SpringBoot.common.LogUtils;
 import game.SpringBoot.model.UserInfo;
 
 public class UserManager
@@ -18,7 +19,7 @@ public class UserManager
 	private Timer validateTimer = null;
 	
 	//账号缓存时间
-	private static final long UserCacheTime = 60000*60*24*1;
+	public static final long UserCacheTime = 60000*60*24*1;
 	
 	private ConcurrentHashMap<String, UserInfo> userMap = new ConcurrentHashMap<>();
 	
@@ -47,7 +48,7 @@ public class UserManager
 		
 		for(UserInfo user : userMap.values())
 		{	
-			if(user.updateTime + UserCacheTime > currentTime)
+			if(user.expireTime > currentTime)
 			{
 				list.add(user.token);
 			}
@@ -56,6 +57,7 @@ public class UserManager
 		{
 			removeUser(id);
 		}
+		LogUtils.getLogger().info("cache user count="+userMap.size());
 	}
 	
 	public UserInfo getUser(String token)

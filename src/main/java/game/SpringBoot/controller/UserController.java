@@ -16,7 +16,7 @@ import game.SpringBoot.common.MyHttpClient;
 import game.SpringBoot.controller.MesseDispatcher.MsgHandler;
 import game.SpringBoot.message.ClientMessages;
 import game.SpringBoot.message.ClientMessages.ClientMessageHeader;
-import game.SpringBoot.message.ClientMessages.ErrorRsp;
+import game.SpringBoot.message.ClientMessages.CommonRsp;
 import game.SpringBoot.message.MessageCode;
 import game.SpringBoot.model.UserInfo;
 
@@ -25,6 +25,9 @@ public class UserController
 {
 	@Autowired
 	private LoginHandler loginHandler;
+	
+	@Autowired
+	private QuestionHandler questionHandler;
 
 	@Autowired
 	private TestHandler testHandler;
@@ -38,19 +41,21 @@ public class UserController
     @PostConstruct
     public void init()
     {
-    	messeDispatcher.registerMsg(ClientMessages.MSG_LOGIN, loginHandler, "onLogin");
-		messeDispatcher.registerMsg(ClientMessages.MSG_TEST,  testHandler,  "onTest");
+    	messeDispatcher.registerMsg(ClientMessages.MSG_LOGIN,    loginHandler,    "onLogin");
+    	messeDispatcher.registerMsg(ClientMessages.MSG_QUIZINFO, questionHandler, "onGetQuizInfo");
+		messeDispatcher.registerMsg(ClientMessages.MSG_TEST,     testHandler,     "onTest");
     }
 	
-	
-	@GetMapping("/test")
-    public String test() 
-    {
-		return testLogin();
-    }
-	private String testLogin()
+	@GetMapping("/testLogin")
+	public String testLogin()
 	{
 		return onUserAction("{\"msg_id\":1,\"msg_data\":{\"code\":\"033Py3X80lCT5H1QuTX80kf6X80Py3XC\"}}");
+	}
+	
+	@GetMapping("/testGetQuizInfo")
+	public String testGetQuizInfo()
+	{
+		return onUserAction("{\"msg_id\":2,\"msg_data\":{\"token\":\"98d5b6f3d3ec4fb2bbaccbfddf4c53c0\"}}");
 	}
 	
 	@PostMapping("/userAction")
@@ -79,9 +84,9 @@ public class UserController
 			userInfo = loginValidate.validate(message.msg_data);
 			if(userInfo == null)
 			{
-				ErrorRsp rsp = new ErrorRsp();
-			    rsp.errcode = MessageCode.CODE_RELOGIN;
-			    rsp.errmsg  = "please relogin by code.";
+				CommonRsp rsp = new CommonRsp();
+			    rsp.result_code = MessageCode.CODE_RELOGIN;
+			    rsp.msg  = "please relogin by code.";
 			    	
 			    return JSONObject.toJSONString(rsp);
 			}
@@ -94,9 +99,9 @@ public class UserController
 		}
 		else
 		{
-			ErrorRsp rsp = new ErrorRsp();
-		    rsp.errcode = MessageCode.FAILED;
-		    rsp.errmsg  = "no message handler.";
+			CommonRsp rsp = new CommonRsp();
+		    rsp.result_code = MessageCode.FAILED;
+		    rsp.msg  = "no message handler.";
 		    	
 		    return JSONObject.toJSONString(rsp);
 		}

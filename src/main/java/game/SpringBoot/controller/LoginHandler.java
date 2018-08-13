@@ -12,7 +12,6 @@ import game.SpringBoot.common.LogUtils;
 import game.SpringBoot.common.MyHttpClient;
 import game.SpringBoot.common.PropertiesConfig;
 import game.SpringBoot.manager.UserManager;
-import game.SpringBoot.message.ClientMessages.ErrorRsp;
 import game.SpringBoot.message.ClientMessages.LoginMsgData;
 import game.SpringBoot.message.ClientMessages.UserLoginRsp;
 import game.SpringBoot.message.MessageCode;
@@ -49,9 +48,10 @@ public class LoginHandler
         {
         	LogUtils.getLogger().info("login by code ret="+ret); 
         	
-        	ErrorRsp rsp = new ErrorRsp();
-        	rsp.errcode = failedInfo.errcode;
-        	rsp.errmsg  = failedInfo.errmsg;
+        	UserLoginRsp rsp = new UserLoginRsp();
+        	rsp.result_code = failedInfo.errcode;
+        	rsp.msg  = failedInfo.errmsg;
+        	rsp.token = "";
         	
         	return JSONObject.toJSONString(rsp);
 
@@ -67,6 +67,7 @@ public class LoginHandler
         userInfo.openid = successInfo.openid;
         userInfo.updateTime = System.currentTimeMillis();
         userInfo.createTime = 0;
+        userInfo.expireTime = System.currentTimeMillis()+UserManager.UserCacheTime;
         
         try
 		{
@@ -78,14 +79,16 @@ public class LoginHandler
 			// TODO Auto-generated catch block
 			LogUtils.getLogger().info(e.toString());
 			
-			ErrorRsp rsp = new ErrorRsp();
-        	rsp.errcode = MessageCode.DB_ERROR;
-        	rsp.errmsg  = "account update error.";
+			UserLoginRsp rsp = new UserLoginRsp();
+        	rsp.result_code = MessageCode.DB_ERROR;
+        	rsp.msg  = "account update error.";
+        	rsp.token = "";
         	
         	return JSONObject.toJSONString(rsp);
 		}
         
         UserLoginRsp loginRsp = new UserLoginRsp();
+        loginRsp.result_code = MessageCode.SUCCESS;
         loginRsp.token = token;
         
 		return JSONObject.toJSONString(loginRsp);

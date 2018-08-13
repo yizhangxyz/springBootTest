@@ -24,7 +24,7 @@ public class LoginValidate
     {
     	RequestMsgData req = JSONObject.parseObject(msgData, RequestMsgData.class);
         
-        if(req == null)
+        if(req == null || req.token == null)
         {
         	LogUtils.getLogger().info("parse RequestMessage error.msgData="+msgData);
         	return null;
@@ -48,6 +48,7 @@ public class LoginValidate
 		}
         if(userInfo != null)
         {
+        	userInfo.expireTime = System.currentTimeMillis()+UserManager.UserCacheTime;
         	UserManager.getInstance().addUser(req.token, userInfo);
         	return userInfo;
         }

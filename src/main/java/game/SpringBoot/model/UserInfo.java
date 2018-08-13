@@ -7,4 +7,5 @@ public class UserInfo
 	public String session_key;   //微信的session key
 	public long createTime;      //账号创建时间
 	public long updateTime;      //账号更新时间
+	public long expireTime;      //缓存到期时间
 }
