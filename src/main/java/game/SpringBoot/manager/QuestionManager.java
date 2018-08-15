@@ -31,6 +31,7 @@ public class QuestionManager
 	public Questions getQuestion(int id)
 	{
 		Questions questions = null;
+		
 		lock.readLock().lock();
 		try
 		{
@@ -40,23 +41,29 @@ public class QuestionManager
 		{
 			lock.readLock().unlock();
 		}
+		
 		if(questions != null)
 		{
 			return questions;
 		}
+		
 		try
 		{
 			questions = questionService.findByQuestionId(id);
-			lock.writeLock().lock();
-			try
+			if(questions != null)
 			{
-				questionsMap.put(id,questions);
-				LogUtils.getLogger().info("questions count="+questionsMap.size());
+				lock.writeLock().lock();
+				try
+				{
+					questionsMap.put(id,questions);
+					LogUtils.getLogger().info("cache questions count="+questionsMap.size());
+				}
+				finally
+				{
+					lock.writeLock().unlock();
+				}
 			}
-			finally
-			{
-				lock.writeLock().unlock();
-			}
+			
 		}
 		catch (SQLException e)
 		{

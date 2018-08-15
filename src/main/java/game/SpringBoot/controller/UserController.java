@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 import game.SpringBoot.common.LogUtils;
 import game.SpringBoot.common.MyHttpClient;
 import game.SpringBoot.controller.MesseDispatcher.MsgHandler;
+import game.SpringBoot.manager.UserManager;
 import game.SpringBoot.message.ClientMessages;
 import game.SpringBoot.message.ClientMessages.ClientMessageHeader;
 import game.SpringBoot.message.ClientMessages.CommonRsp;
@@ -90,6 +91,8 @@ public class UserController
 			    	
 			    return JSONObject.toJSONString(rsp);
 			}
+			//更新缓存过期时间
+			userInfo.expireTime = System.currentTimeMillis()+UserManager.UserCacheTime;
 		}
 		
 		MsgHandler handler = messeDispatcher.getHandler(message.msg_id);

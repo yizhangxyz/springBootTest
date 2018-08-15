@@ -7,7 +7,7 @@ import game.SpringBoot.model.SubjectDetail;
 
 public abstract class Analizer
 {
-	public abstract int analize(SubjectDetail subject,int answer);
+	public abstract int analize(SubjectDetail subject,String answer);
 	
 	private static final int WEIGHT_CHECK     = 0;
 	private static final int RANDOM_BY_WEIGHT = 1;

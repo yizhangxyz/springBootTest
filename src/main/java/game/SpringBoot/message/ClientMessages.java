@@ -30,8 +30,8 @@ public class ClientMessages
 	//提交答案
 	public static class PostAnswers
 	{
-		public int question_id;
-		public List<Integer> answers;
+		public int quiz_id;
+		public List<String> answers;
 	}
 	
 	
@@ -55,7 +55,7 @@ public class ClientMessages
 	public static class QuizRsp
 	{
 		public int result_code;
-		public String msg;
+		public String result_msg;
 		public int score;
 	} 
 }

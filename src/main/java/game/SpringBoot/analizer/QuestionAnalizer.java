@@ -32,7 +32,8 @@ public class QuestionAnalizer
 		return score;
 	}
 	
-	int analizeSubject(SubjectDetail subject,Integer answer)
+	
+	private int analizeSubject(SubjectDetail subject,String answer)
 	{
 		Analizer analizer = Analizer.getAnalizer(subject.analizer);
 		if(analizer != null)

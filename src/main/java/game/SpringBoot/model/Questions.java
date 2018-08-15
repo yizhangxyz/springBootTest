@@ -5,7 +5,9 @@ import java.util.List;
 public class Questions
 {
 	private List<SubjectDetail> subjects;
-
+	
+	private List<QuestionResult> questionResults;
+	
 	public List<SubjectDetail> getSubjects()
 	{
 		return subjects;
@@ -15,4 +17,27 @@ public class Questions
 	{
 		this.subjects = subjects;
 	}
+
+	public List<QuestionResult> getQuestionResults()
+	{
+		return questionResults;
+	}
+
+	public void setQuestionResults(List<QuestionResult> questionResults)
+	{
+		this.questionResults = questionResults;
+	}
+	
+	public String getResult(int score)
+	{
+		for(QuestionResult questionResult : questionResults)
+		{
+			if(score >= questionResult.min_score && score <= questionResult.max_score)
+			{
+				return questionResult.result;
+			}
+		}
+		return "";
+	}
+	
 }

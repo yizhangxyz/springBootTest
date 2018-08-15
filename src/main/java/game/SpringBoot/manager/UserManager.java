@@ -48,7 +48,7 @@ public class UserManager
 		
 		for(UserInfo user : userMap.values())
 		{	
-			if(user.expireTime > currentTime)
+			if(user.expireTime < currentTime)
 			{
 				list.add(user.token);
 			}
@@ -70,8 +70,8 @@ public class UserManager
 		userMap.put(token, userInfo);
 	}
 	
-	public void removeUser(String sessionId)
+	public void removeUser(String token)
 	{
-		userMap.remove(sessionId);
+		userMap.remove(token);
 	}
 }

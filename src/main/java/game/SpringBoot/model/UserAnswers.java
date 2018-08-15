@@ -6,19 +6,19 @@ import game.SpringBoot.message.ClientMessages.PostAnswers;
 
 public class UserAnswers
 {
-	private List<Integer> answers;
+	private List<String> answers;
 
 	public UserAnswers(PostAnswers postAnswers)
 	{
 		this.answers = postAnswers.answers;
 	}
-	
-	public List<Integer> getAnswers()
+
+	public List<String> getAnswers()
 	{
 		return answers;
 	}
 
-	public void setAnswers(List<Integer> answers)
+	public void setAnswers(List<String> answers)
 	{
 		this.answers = answers;
 	}

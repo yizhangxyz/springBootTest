@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import game.SpringBoot.dao.SubjectDao;
+import game.SpringBoot.model.QuestionResult;
 import game.SpringBoot.model.SubjectDetail;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -19,7 +20,7 @@ import jxl.read.biff.BiffException;
 
 public class DataImporter
 {
-    public List<List<String>> readExcel(String filePath)
+    public List<List<String>> readExcel(String filePath,int sheetNum)
     {
         try
         {
@@ -28,7 +29,7 @@ public class DataImporter
            
             List<List<String>> outerList=new ArrayList<List<String>>();
             
-            Sheet sheet = wb.getSheet(0);
+            Sheet sheet = wb.getSheet(sheetNum);
          
             for (int i = 0; i < sheet.getRows(); i++)
             {
@@ -71,7 +72,7 @@ public class DataImporter
 	    }
 	}
 	
-	public void importData(List<List<String>> excelList)
+	public void importQuestionData(List<List<String>> excelList)
 	{
 		Map<String, Integer> titleIndexMap = new HashMap<>();
 		List<String> tileList = excelList.get(0);
@@ -80,69 +81,108 @@ public class DataImporter
     		titleIndexMap.put(tileList.get(i), i);
     	}
     	
-    	int idIndex         = titleIndexMap.get("id");
-    	int subject_idIndex = titleIndexMap.get("subject_id");
-    	int subject_index   = titleIndexMap.get("index");
-    	int scoreIndex      = titleIndexMap.get("score");
-    	int answer_typeIndex= titleIndexMap.get("answer_type");
-    	int weight1Index    = titleIndexMap.get("weight1");
-    	int weight2Index    = titleIndexMap.get("weight2");
-    	int weight3Index    = titleIndexMap.get("weight3");
-    	int weight4Index    = titleIndexMap.get("weight4");
-    	int analizerIndex   = titleIndexMap.get("analizer");
-    	int contentIndex    = titleIndexMap.get("content");
-    	int answer1Index    = titleIndexMap.get("answer1");
-    	int answer2Index    = titleIndexMap.get("answer2");
-    	int answer3Index    = titleIndexMap.get("answer3");
-    	int answer4Index    = titleIndexMap.get("answer4");
+    	int idIndex          = titleIndexMap.get("id");
+    	int subject_idIndex  = titleIndexMap.get("subject_id");
+    	int subject_index    = titleIndexMap.get("subject_index");
+    	int scoreIndex       = titleIndexMap.get("score");
+    	int answer_countIndex= titleIndexMap.get("answer_count");
+    	int answer_typeIndex = titleIndexMap.get("answer_type");
+    	int analizerIndex    = titleIndexMap.get("analizer");
+    	
+    	int contentIndex     = titleIndexMap.get("content");
+    	int answersIndex     = titleIndexMap.get("answers");
+    	int weightsIndex     = titleIndexMap.get("weights");
+    	
     	
     	SubjectDao subjectDao = new SubjectDao();
     	
-    	int subjectCount = 0;
+    	int successCount = 0;
 		for (int i = 1; i < excelList.size(); i++)
 	    {
 			SubjectDetail subjectDetail = new SubjectDetail();
 	    	List<String> list = excelList.get(i);
 	    	
-	    	subjectDetail.id            = Integer.parseInt( (String)list.get(idIndex));
-	    	subjectDetail.subject_id    = Integer.parseInt( (String)list.get(subject_idIndex));
-	    	subjectDetail.subject_index = Integer.parseInt( (String)list.get(subject_index));
-	    	subjectDetail.score         = Integer.parseInt( (String)list.get(scoreIndex));
-	    	subjectDetail.answer_type   = Integer.parseInt( (String)list.get(answer_typeIndex));
-	    	subjectDetail.weights[0]    = Integer.parseInt( (String)list.get(weight1Index));
-	    	subjectDetail.weights[1]    = Integer.parseInt( (String)list.get(weight2Index));
-	    	subjectDetail.weights[2]    = Integer.parseInt( (String)list.get(weight3Index));
-	    	subjectDetail.weights[3]    = Integer.parseInt( (String)list.get(weight4Index));
-	    	subjectDetail.analizer      = Integer.parseInt( (String)list.get(analizerIndex));
+	    	subjectDetail.id            = Integer.parseInt( list.get(idIndex));
+	    	subjectDetail.subject_id    = Integer.parseInt( list.get(subject_idIndex));
+	    	subjectDetail.subject_index = Integer.parseInt( list.get(subject_index));
+	    	subjectDetail.score         = Integer.parseInt( list.get(scoreIndex));
+	    	subjectDetail.answer_type   = Integer.parseInt( list.get(answer_typeIndex));
+	    	subjectDetail.answer_count  = Integer.parseInt( list.get(answer_countIndex));
+	    	subjectDetail.analizer      = Integer.parseInt( list.get(analizerIndex));
+	    	subjectDetail.content       = list.get(contentIndex);
 	    	
-	    	subjectDetail.content       = (String)list.get(contentIndex);
-	    	subjectDetail.answers[0]    = (String)list.get(answer1Index);
-	    	subjectDetail.answers[1]    = (String)list.get(answer2Index);
-	    	subjectDetail.answers[2]    = (String)list.get(answer3Index);
-	    	subjectDetail.answers[3]    = (String)list.get(answer4Index);
-	    	
+	    	subjectDetail.setAnswers(list.get(answersIndex));
+	    	subjectDetail.setWeights(list.get(weightsIndex));
+
 	    	try
 			{
 				subjectDao.insertSubject(subjectDetail);
-				subjectCount++;
+				successCount++;
 			}
 			catch (SQLException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				System.out.println("insert subject failed, count="+subjectCount);
+				System.out.println("insert subject failed, count="+successCount);
 				return;
 			}
 	    }
-		System.out.println("insert subject success, count="+subjectCount);
+		System.out.println("insert subject success, count="+successCount);
+	}
+	
+	public void importResultData(List<List<String>> excelList)
+	{
+		Map<String, Integer> titleIndexMap = new HashMap<>();
+		List<String> tileList = excelList.get(0);
+    	for (int i = 0; i < tileList.size(); i++)
+    	{
+    		titleIndexMap.put(tileList.get(i), i);
+    	}
+    	
+    	int idIndex          = titleIndexMap.get("id");
+    	int subject_idIndex  = titleIndexMap.get("subject_id");
+    	int min_scoreIndex   = titleIndexMap.get("min_score");
+    	int max_scoreIndex   = titleIndexMap.get("max_score");
+    	int resultIndex      = titleIndexMap.get("result");
+
+    	SubjectDao subjectDao = new SubjectDao();
+    	
+    	int successCount = 0;
+		for (int i = 1; i < excelList.size(); i++)
+	    {
+			QuestionResult questionResult = new QuestionResult();
+	    	List<String> list = excelList.get(i);
+	    	
+	    	questionResult.id            = Integer.parseInt( list.get(idIndex));
+	    	questionResult.subject_id    = Integer.parseInt( list.get(subject_idIndex));
+	    	questionResult.min_score     = Integer.parseInt( list.get(min_scoreIndex));
+	    	questionResult.max_score     = Integer.parseInt( list.get(max_scoreIndex));
+	    	questionResult.result        = list.get(resultIndex);
+	    		
+	    	try
+			{
+				subjectDao.insertQuestionResult(questionResult);
+				successCount++;
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("insert questionResult failed, count="+successCount);
+				return;
+			}
+	    }
+		System.out.println("insert questionResult success, count="+successCount);
 	}
 	
 	public static void main(String[] args)
 	{
 		DataImporter dataImporter = new DataImporter();
 		
-		List<List<String>> excelList = dataImporter.readExcel("subjects.xls");
-	    dataImporter.showData(excelList);
-	    //dataImporter.importData(excelList);
+		List<List<String>> questionList = dataImporter.readExcel("subjects.xls",0);
+	    dataImporter.importQuestionData(questionList);
+	    
+	    List<List<String>> resultList = dataImporter.readExcel("subjects.xls",1);
+	    dataImporter.importResultData(resultList);
 	}
 }

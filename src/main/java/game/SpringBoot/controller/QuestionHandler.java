@@ -26,13 +26,13 @@ public class QuestionHandler
 	{
 		PostAnswers postAnswers = JSONObject.parseObject(msgData, PostAnswers.class);
 		
-		Questions questions = QuestionManager.getInstance().getQuestion(postAnswers.question_id);
+		Questions questions = QuestionManager.getInstance().getQuestion(postAnswers.quiz_id);
 		
 		if(questions == null)
 		{
 			QuizRsp rsp = new QuizRsp();
 			rsp.result_code = MessageCode.FAILED;
-			rsp.msg = "no question";
+			rsp.result_msg  = "no question";
 
 			return JSONObject.toJSONString(rsp);
 		}
@@ -45,6 +45,7 @@ public class QuestionHandler
 		
 		QuizRsp rsp = new QuizRsp();
 		rsp.result_code = MessageCode.SUCCESS;
+		rsp.result_msg  = questions.getResult(score);
 		rsp.score = score;
 		
 		return JSONObject.toJSONString(rsp);
