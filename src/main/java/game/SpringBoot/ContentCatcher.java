@@ -45,7 +45,7 @@ public class ContentCatcher
 	
 	static void catchContent()
 	{
-		String urlTemplate = "http://www.buyiju.com/guanyin/xx.html";
+		String urlTemplate = "xxxx";
 		for(int i=1;i<=100;i++)
 		{
 			if(i == 72)
