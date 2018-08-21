@@ -28,6 +28,11 @@ public class QuestionManager
 		return QuestionManagerHolder.instance;
 	}
 	
+	private QuestionManager()
+	{
+		
+	}
+	
 	public Questions getQuestion(int id)
 	{
 		Questions questions = null;

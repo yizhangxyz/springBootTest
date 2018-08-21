@@ -4,9 +4,13 @@ import java.util.List;
 
 public class ClientMessages
 {
-	public static final int MSG_LOGIN    = 1;     //登录
-	public static final int MSG_QUIZINFO = 2;     //请求试题
-	public static final int MSG_TEST     = 100;   //测试
+	public static final int MSG_LOGIN           = 1;     //登录
+	public static final int MSG_QUIZINFO        = 2;     //请求试题
+	public static final int MSG_TEST            = 100;   //测试
+	
+	public static final int MSG_DRAW            = 101;   //求签
+	public static final int MSG_THROW_GRAIL     = 102;   //投掷圣杯
+	public static final int MSG_ANSWER_DRAW     = 103;   //解签
 	
 	//消息头
 	public static class ClientMessageHeader
@@ -58,4 +62,32 @@ public class ClientMessages
 		public String result_msg;
 		public int score;
 	} 
+	
+	//求签应答
+	public static class DrawRsp
+	{
+		public int resultIndex;
+		public String resultMsg;
+	} 
+	
+	//投掷杯子应答
+	public static class ThrowCupRsp
+	{
+		public boolean isValid;
+		public int validTimes;
+		public int times;
+	} 
+	
+	//解签应答
+	public static class DrawResultRsp
+	{
+		public String title;     //标题
+		public String type;      //中签类型
+		public String verse;     //诗曰
+		public String lotInfo;   //签语
+		public String answer;    //解签
+		public String lucky;     //仙机
+		public String story;     //故事
+		public String imgUrl;    //图解
+	}
 }

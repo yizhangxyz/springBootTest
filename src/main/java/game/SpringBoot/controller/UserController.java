@@ -31,6 +31,9 @@ public class UserController
 	private QuestionHandler questionHandler;
 
 	@Autowired
+	private DrawHandler drawHandler;
+	
+	@Autowired
 	private TestHandler testHandler;
 
 	@Autowired
@@ -42,9 +45,13 @@ public class UserController
     @PostConstruct
     public void init()
     {
-    	messeDispatcher.registerMsg(ClientMessages.MSG_LOGIN,    loginHandler,    "onLogin");
-    	messeDispatcher.registerMsg(ClientMessages.MSG_QUIZINFO, questionHandler, "onGetQuizInfo");
-		messeDispatcher.registerMsg(ClientMessages.MSG_TEST,     testHandler,     "onTest");
+    	messeDispatcher.registerMsg(ClientMessages.MSG_LOGIN,        loginHandler,    "onLogin");
+    	messeDispatcher.registerMsg(ClientMessages.MSG_QUIZINFO,     questionHandler, "onGetQuizInfo");
+		messeDispatcher.registerMsg(ClientMessages.MSG_TEST,         testHandler,     "onTest");
+		
+		messeDispatcher.registerMsg(ClientMessages.MSG_DRAW,         drawHandler,     "onDraw");
+		messeDispatcher.registerMsg(ClientMessages.MSG_THROW_GRAIL,  drawHandler,     "onThrowGrail");
+		messeDispatcher.registerMsg(ClientMessages.MSG_ANSWER_DRAW,  drawHandler,     "onAnswerTheDraw");
     }
 	
 	@GetMapping("/testLogin")

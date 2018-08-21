@@ -7,16 +7,7 @@ import game.SpringBoot.model.UserAnswers;
 
 public class QuestionAnalizer
 {
-	private UserAnswers userAnswers;
-	private Questions questions;
-	
-	public QuestionAnalizer(UserAnswers userAnswers,Questions questions)
-	{
-		this.userAnswers = userAnswers;
-		this.questions = questions;
-	}
-	
-	public int analize()
+	public static int analize(UserAnswers userAnswers,Questions questions)
 	{
 		if(userAnswers.getAnswers().size() != questions.getSubjects().size())
 		{
@@ -33,7 +24,7 @@ public class QuestionAnalizer
 	}
 	
 	
-	private int analizeSubject(SubjectDetail subject,String answer)
+	private static int analizeSubject(SubjectDetail subject,String answer)
 	{
 		Analizer analizer = Analizer.getAnalizer(subject.analizer);
 		if(analizer != null)

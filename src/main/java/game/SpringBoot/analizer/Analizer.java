@@ -9,8 +9,8 @@ public abstract class Analizer
 {
 	public abstract int analize(SubjectDetail subject,String answer);
 	
-	private static final int WEIGHT_CHECK     = 0;
-	private static final int RANDOM_BY_WEIGHT = 1;
+	private static final int WEIGHT_CHECK     = 1;
+	private static final int RANDOM_BY_WEIGHT = 2;
 	
 	private static Map<Integer, Analizer> analizersMap = new HashMap<>();
 	

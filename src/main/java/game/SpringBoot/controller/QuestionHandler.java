@@ -27,6 +27,7 @@ public class QuestionHandler
 		PostAnswers postAnswers = JSONObject.parseObject(msgData, PostAnswers.class);
 		
 		Questions questions = QuestionManager.getInstance().getQuestion(postAnswers.quiz_id);
+		UserAnswers userAnswers = new UserAnswers(postAnswers);
 		
 		if(questions == null)
 		{
@@ -36,12 +37,9 @@ public class QuestionHandler
 
 			return JSONObject.toJSONString(rsp);
 		}
+
 		
-		UserAnswers userAnswers = new UserAnswers(postAnswers);
-		
-		QuestionAnalizer questionAnalizer = new QuestionAnalizer(userAnswers,questions);
-		
-		int score = questionAnalizer.analize();
+		int score = QuestionAnalizer.analize(userAnswers,questions);
 		
 		QuizRsp rsp = new QuizRsp();
 		rsp.result_code = MessageCode.SUCCESS;
