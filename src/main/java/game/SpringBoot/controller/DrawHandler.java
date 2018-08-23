@@ -1,7 +1,11 @@
 package game.SpringBoot.controller;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 
+import game.SpringBoot.common.LogUtils;
 import game.SpringBoot.manager.DrawManager;
 import game.SpringBoot.message.ClientMessages.DrawResultRsp;
 import game.SpringBoot.message.ClientMessages.DrawRsp;
@@ -23,14 +28,61 @@ public class DrawHandler
 	//求签信息
 	static class DrawInfo
 	{
+		String openId;       //所属用户
 		int drawIndex;       //求签序号
 		int resultIndex;     //解签结果序号
 		int grailCount;      //圣杯次数
+		boolean finished;    //是否结束
+		long createTime;     //创建时间
+		long finishTime;     //结束时间
+		int finishDay;       //结束日期，冗余数据，避免重复计算
+		
 	}
 	
 	private AtomicInteger atomicInteger = new AtomicInteger(0);
 
 	private ConcurrentHashMap<String, DrawInfo> userDrawMap = new ConcurrentHashMap<>();
+	
+	private Timer checkTimer = null;
+	
+	public DrawHandler()
+	{
+		checkTimer = new Timer();
+		checkTimer.scheduleAtFixedRate(new TimerTask()
+		{
+			@Override public void run()
+			{
+				DrawHandler.this.checkDrawInfo();
+			}
+		}, 5*60000, 5*60000);
+	}
+	
+	private void checkDrawInfo()
+	{
+		List<String> list = new ArrayList<String>();
+		
+		long currentTime = System.currentTimeMillis();
+		int currentDay   = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+		
+		for(DrawInfo drawInfo : userDrawMap.values())
+		{	
+			//10分钟都未结束
+			if(!drawInfo.finished && (currentTime - drawInfo.createTime) > 10*60000 )
+			{
+				list.add(drawInfo.openId);
+			}
+			//已经结束，当日存储
+			else if(drawInfo.finished && currentDay > drawInfo.finishDay)
+			{
+				list.add(drawInfo.openId);
+			}
+		}
+		for(String id : list)
+		{
+			userDrawMap.remove(id);
+		}
+		LogUtils.getLogger().info("cache drawInfo count="+userDrawMap.size());
+	}
 	
 	//求签
 	public String onDraw(UserInfo userInfo,String msgData)
@@ -48,9 +100,12 @@ public class DrawHandler
 		int drawIndex = atomicInteger.incrementAndGet();
 		
 		DrawInfo drawInfo    = new DrawInfo();
+		drawInfo.openId      = userInfo.openid;
 		drawInfo.drawIndex   = drawIndex;
 		drawInfo.resultIndex = resultIndex;
 		drawInfo.grailCount  = 0;
+		drawInfo.finished    = false;
+		drawInfo.createTime  = System.currentTimeMillis();
 		
 		userDrawMap.put(userInfo.openid, drawInfo);
 		
@@ -127,6 +182,10 @@ public class DrawHandler
 
 			return JSONObject.toJSONString(rsp);
 		}
+		drawInfo.finished    = true;
+		drawInfo.finishTime  = System.currentTimeMillis();
+		//冗余，避免不停的计算
+		drawInfo.finishDay   = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
 
 		DrawResult result = DrawManager.getInstance().getResultList().get(drawInfo.resultIndex);
 		
