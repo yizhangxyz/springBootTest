@@ -8,8 +8,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
-import game.SpringBoot.message.ClientMessages.DrawResultRsp;
-import game.SpringBoot.message.ClientMessages.LoginMsgData;
+import game.SpringBoot.model.DrawResult;
 
 public class DrawManager
 {
@@ -23,7 +22,7 @@ public class DrawManager
 		return DrawManagerHolder.instance;
 	}
 
-	private List<DrawResultRsp> resultList = new ArrayList<>();
+	private List<DrawResult> resultList = new ArrayList<>();
 	
 	private DrawManager()
 	{
@@ -48,7 +47,7 @@ public class DrawManager
 			
 			while ((str = bf.readLine()) != null) 
 			{
-				DrawResultRsp result = JSONObject.parseObject(str, DrawResultRsp.class);
+				DrawResult result = JSONObject.parseObject(str, DrawResult.class);
 				resultList.add(result);
 			}
 			bf.close();
@@ -60,12 +59,12 @@ public class DrawManager
 		}
 	}
 
-	public List<DrawResultRsp> getResultList()
+	public List<DrawResult> getResultList()
 	{
 		return resultList;
 	}
 
-	public void setResultList(List<DrawResultRsp> resultList)
+	public void setResultList(List<DrawResult> resultList)
 	{
 		this.resultList = resultList;
 	}

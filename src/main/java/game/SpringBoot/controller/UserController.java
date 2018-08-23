@@ -17,7 +17,7 @@ import game.SpringBoot.controller.MesseDispatcher.MsgHandler;
 import game.SpringBoot.manager.UserManager;
 import game.SpringBoot.message.ClientMessages;
 import game.SpringBoot.message.ClientMessages.ClientMessageHeader;
-import game.SpringBoot.message.ClientMessages.CommonRsp;
+import game.SpringBoot.message.ClientMessages.Response;
 import game.SpringBoot.message.MessageCode;
 import game.SpringBoot.model.UserInfo;
 
@@ -87,14 +87,14 @@ public class UserController
 		
 		UserInfo userInfo = null;
 		//非登录信息验证是否登录
-		if(message.msg_id != ClientMessages.MSG_LOGIN)
+		if(message.msgId != ClientMessages.MSG_LOGIN)
 		{
-			userInfo = loginValidate.validate(message.msg_data);
+			userInfo = loginValidate.validate(message.msgData);
 			if(userInfo == null)
 			{
-				CommonRsp rsp = new CommonRsp();
-			    rsp.result_code = MessageCode.CODE_RELOGIN;
-			    rsp.msg  = "please relogin by code.";
+				Response rsp = new Response();
+			    rsp.resultCode = MessageCode.CODE_RELOGIN;
+			    rsp.msg        = "please relogin by code.";
 			    	
 			    return JSONObject.toJSONString(rsp);
 			}
@@ -102,16 +102,16 @@ public class UserController
 			userInfo.expireTime = System.currentTimeMillis()+UserManager.UserCacheTime;
 		}
 		
-		MsgHandler handler = messeDispatcher.getHandler(message.msg_id);
+		MsgHandler handler = messeDispatcher.getHandler(message.msgId);
 		if(handler != null)
 		{
-			return handler.invoke(userInfo,message.msg_data);
+			return handler.invoke(userInfo,message.msgData);
 		}
 		else
 		{
-			CommonRsp rsp = new CommonRsp();
-		    rsp.result_code = MessageCode.FAILED;
-		    rsp.msg  = "no message handler.";
+			Response rsp = new Response();
+		    rsp.resultCode = MessageCode.FAILED;
+		    rsp.msg        = "no message handler.";
 		    	
 		    return JSONObject.toJSONString(rsp);
 		}

@@ -15,8 +15,8 @@ public class ClientMessages
 	//消息头
 	public static class ClientMessageHeader
 	{
-		public int    msg_id;
-		public String msg_data;
+		public int    msgId;
+		public String msgData;
 	}
 	
 	//登录请求
@@ -34,55 +34,63 @@ public class ClientMessages
 	//提交答案
 	public static class PostAnswers
 	{
-		public int quiz_id;
+		public int quizId;
 		public List<String> answers;
 	}
 	
 	
 	//返回客户端数据----------------------------------------------------------------------
-	//普通消息
-	public static class CommonRsp
+	
+	//应答消息头
+	public static class Response
 	{
-		public int result_code;
+		public int resultCode;
 		public String msg;
 	}
 	
 	//登录成功消息
-	public static class UserLoginRsp
+	public static class UserLoginRsp extends Response
 	{
-		public int result_code;
-		public String msg;
 		public String token;
 	} 
 	
 	//答题结果
-	public static class QuizRsp
+	public static class QuizRsp extends Response
 	{
-		public int result_code;
-		public String result_msg;
 		public int score;
 	} 
 	
 	//求签应答
-	public static class DrawRsp
+	public static class DrawRsp extends Response
 	{
-		public int resultIndex;
-		public String resultMsg;
+		public int drawIndex;
+		public int drawType;    //类型数值（上、中、下...）
+		public String drawMsg;
 	} 
 	
 	//投掷杯子应答
-	public static class ThrowCupRsp
+	public static class ThrowCupRsp extends Response
 	{
 		public boolean isValid;
-		public int validTimes;
 		public int times;
 	} 
 	
+	public static class DrawRetType
+	{
+		public static final int Invalid = 0;
+		public static final int Great   = 1;
+		public static final int Good    = 2;
+		public static final int Normal  = 3;
+		public static final int Low     = 4;
+		public static final int Bad     = 5;
+	}
+	
 	//解签应答
-	public static class DrawResultRsp
+	public static class DrawResultRsp  extends Response
 	{
 		public String title;     //标题
 		public String type;      //中签类型
+		public int typeValue;    //类型数值（上、中、下...）
 		public String verse;     //诗曰
 		public String lotInfo;   //签语
 		public String answer;    //解签

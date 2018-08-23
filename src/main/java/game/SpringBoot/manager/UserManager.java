@@ -67,6 +67,18 @@ public class UserManager
 	
 	public void addUser(String token, UserInfo userInfo)
 	{
+		List<String> list = new ArrayList<String>();
+		for(UserInfo user : userMap.values())
+		{	
+			if(user.openid.equals(userInfo.openid))
+			{
+				list.add(user.token);
+			}
+		}
+		for(String id : list)
+		{
+			removeUser(id);
+		}
 		userMap.put(token, userInfo);
 	}
 	

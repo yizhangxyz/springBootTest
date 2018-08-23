@@ -49,9 +49,9 @@ public class LoginHandler
         	LogUtils.getLogger().info("login by code ret="+ret); 
         	
         	UserLoginRsp rsp = new UserLoginRsp();
-        	rsp.result_code = failedInfo.errcode;
-        	rsp.msg  = failedInfo.errmsg;
-        	rsp.token = "";
+        	rsp.resultCode = failedInfo.errcode;
+        	rsp.msg        = failedInfo.errmsg;
+        	rsp.token      = "";
         	
         	return JSONObject.toJSONString(rsp);
 
@@ -80,16 +80,16 @@ public class LoginHandler
 			LogUtils.getLogger().info(e.toString());
 			
 			UserLoginRsp rsp = new UserLoginRsp();
-        	rsp.result_code = MessageCode.DB_ERROR;
-        	rsp.msg  = "account update error.";
-        	rsp.token = "";
+        	rsp.resultCode = MessageCode.DB_ERROR;
+        	rsp.msg        = "account update error.";
+        	rsp.token      = "";
         	
         	return JSONObject.toJSONString(rsp);
 		}
         
         UserLoginRsp loginRsp = new UserLoginRsp();
-        loginRsp.result_code = MessageCode.SUCCESS;
-        loginRsp.token = token;
+        loginRsp.resultCode   = MessageCode.SUCCESS;
+        loginRsp.token        = token;
         
 		return JSONObject.toJSONString(loginRsp);
 	}

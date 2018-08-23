@@ -103,11 +103,11 @@ public class DataImporter
 	    	List<String> list = excelList.get(i);
 	    	
 	    	subjectDetail.id            = Integer.parseInt( list.get(idIndex));
-	    	subjectDetail.subject_id    = Integer.parseInt( list.get(subject_idIndex));
-	    	subjectDetail.subject_index = Integer.parseInt( list.get(subject_index));
+	    	subjectDetail.subjectId     = Integer.parseInt( list.get(subject_idIndex));
+	    	subjectDetail.subjectIndex  = Integer.parseInt( list.get(subject_index));
 	    	subjectDetail.score         = Integer.parseInt( list.get(scoreIndex));
-	    	subjectDetail.answer_type   = Integer.parseInt( list.get(answer_typeIndex));
-	    	subjectDetail.answer_count  = Integer.parseInt( list.get(answer_countIndex));
+	    	subjectDetail.answerType    = Integer.parseInt( list.get(answer_typeIndex));
+	    	subjectDetail.answerCount  = Integer.parseInt( list.get(answer_countIndex));
 	    	subjectDetail.analizer      = Integer.parseInt( list.get(analizerIndex));
 	    	subjectDetail.content       = list.get(contentIndex);
 	    	
@@ -153,11 +153,11 @@ public class DataImporter
 			QuestionResult questionResult = new QuestionResult();
 	    	List<String> list = excelList.get(i);
 	    	
-	    	questionResult.id            = Integer.parseInt( list.get(idIndex));
-	    	questionResult.subject_id    = Integer.parseInt( list.get(subject_idIndex));
-	    	questionResult.min_score     = Integer.parseInt( list.get(min_scoreIndex));
-	    	questionResult.max_score     = Integer.parseInt( list.get(max_scoreIndex));
-	    	questionResult.result        = list.get(resultIndex);
+	    	questionResult.id           = Integer.parseInt( list.get(idIndex));
+	    	questionResult.subjectId    = Integer.parseInt( list.get(subject_idIndex));
+	    	questionResult.minScore     = Integer.parseInt( list.get(min_scoreIndex));
+	    	questionResult.maxScore     = Integer.parseInt( list.get(max_scoreIndex));
+	    	questionResult.result       = list.get(resultIndex);
 	    		
 	    	try
 			{

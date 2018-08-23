@@ -24,12 +24,12 @@ public class SubjectDao
             conn = DBUtils.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, subject.id);
-            ps.setInt(2, subject.subject_id);
-            ps.setInt(3, subject.subject_index);
+            ps.setInt(2, subject.subjectId);
+            ps.setInt(3, subject.subjectIndex);
             ps.setInt(4, subject.score);
             ps.setString(5, subject.content);
-            ps.setInt(6, subject.answer_type);
-            ps.setInt(7, subject.answer_count);
+            ps.setInt(6, subject.answerType);
+            ps.setInt(7, subject.answerCount);
             ps.setString(8, subject.getAnswers());
             ps.setString(9, subject.getWeights());
             ps.setInt(10, subject.analizer);
@@ -55,9 +55,9 @@ public class SubjectDao
             conn = DBUtils.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, questionResult.id);
-            ps.setInt(2, questionResult.subject_id);
-            ps.setInt(3, questionResult.min_score);
-            ps.setInt(4, questionResult.max_score);
+            ps.setInt(2, questionResult.subjectId);
+            ps.setInt(3, questionResult.minScore);
+            ps.setInt(4, questionResult.maxScore);
             ps.setString(5, questionResult.result);
             ps.execute();
         }
@@ -94,12 +94,12 @@ public class SubjectDao
             	SubjectDetail subjectDetail = new SubjectDetail();
             	
             	subjectDetail.id = rs.getInt(1);
-            	subjectDetail.subject_id = rs.getInt(2);
-            	subjectDetail.subject_index = rs.getInt(3);
+            	subjectDetail.subjectId = rs.getInt(2);
+            	subjectDetail.subjectIndex = rs.getInt(3);
             	subjectDetail.score = rs.getInt(4);
             	subjectDetail.content = rs.getString(5);
-            	subjectDetail.answer_type = rs.getInt(6);
-            	subjectDetail.answer_count = rs.getInt(7);
+            	subjectDetail.answerType = rs.getInt(6);
+            	subjectDetail.answerCount = rs.getInt(7);
             	subjectDetail.setAnswers(rs.getString(8));
             	subjectDetail.setWeights(rs.getString(9));
             	subjectDetail.analizer = rs.getInt(10);
@@ -142,9 +142,9 @@ public class SubjectDao
             	QuestionResult questionResult = new QuestionResult();
             	
             	questionResult.id = rs.getInt(1);
-            	questionResult.subject_id = rs.getInt(2);
-            	questionResult.min_score = rs.getInt(3);
-            	questionResult.max_score = rs.getInt(4);
+            	questionResult.subjectId = rs.getInt(2);
+            	questionResult.minScore = rs.getInt(3);
+            	questionResult.maxScore = rs.getInt(4);
             	questionResult.result = rs.getString(5);
             	
             	results.add(questionResult);

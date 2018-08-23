@@ -3,12 +3,12 @@ package game.SpringBoot.model;
 public class SubjectDetail
 {
 	public int id;
-	public int subject_id;
-	public int subject_index;
+	public int subjectId;
+	public int subjectIndex;
 	public int score;
 	public String content;
-	public int answer_type;
-	public int answer_count;
+	public int answerType;
+	public int answerCount;
 	public String[] answers = new String[10];
 	public int[] weights = new int[10];
 	public int analizer;
@@ -17,7 +17,7 @@ public class SubjectDetail
 	public void setAnswers(String answersStr)
 	{
 		 String[] sArray= answersStr.split("\\*");
-		 for(int i=0;i<answer_count;i++)
+		 for(int i=0;i<answerCount;i++)
 		 {
 			 answers[i] = sArray[i];
 		 }
@@ -26,7 +26,7 @@ public class SubjectDetail
 	public String getAnswers()
 	{
 		StringBuilder builder = new StringBuilder();
-		for(int i=0;i<answer_count;i++)
+		for(int i=0;i<answerCount;i++)
 		{
 			builder.append(answers[i]);
 			builder.append("*");
@@ -37,7 +37,7 @@ public class SubjectDetail
 	public void setWeights(String weightsStr)
 	{
 		 String[] sArray= weightsStr.split("\\*");
-		 for(int i=0;i<answer_count;i++)
+		 for(int i=0;i<answerCount;i++)
 		 {
 			 weights[i] = Integer.parseInt(sArray[i]);
 		 }
@@ -47,7 +47,7 @@ public class SubjectDetail
 	public String getWeights()
 	{
 		StringBuilder builder = new StringBuilder();
-		for(int i=0;i<answer_count;i++)
+		for(int i=0;i<answerCount;i++)
 		{
 			builder.append(weights[i]);
 			builder.append("*");

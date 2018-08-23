@@ -3,8 +3,8 @@ package game.SpringBoot.model;
 public class QuestionResult
 {
 	public int id;
-	public int subject_id;
-	public int min_score;
-	public int max_score;
+	public int subjectId;
+	public int minScore;
+	public int maxScore;
 	public String result;
 }

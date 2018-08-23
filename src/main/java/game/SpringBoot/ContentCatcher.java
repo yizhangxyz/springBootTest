@@ -1,5 +1,13 @@
 package game.SpringBoot;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -7,14 +15,15 @@ import com.alibaba.fastjson.JSONObject;
 
 import game.SpringBoot.common.MyHttpClient;
 import game.SpringBoot.manager.DrawManager;
-import game.SpringBoot.message.ClientMessages.DrawResultRsp;
+import game.SpringBoot.message.ClientMessages.DrawRetType;
+import game.SpringBoot.model.DrawResult;
 
 public class ContentCatcher
 {
-	static DrawResultRsp ParseContent(String content)
+	static DrawResult ParseContent(String content)
 	{
 		
-		DrawResultRsp rsp = new DrawResultRsp();
+		DrawResult rsp = new DrawResult();
 		
     	String html  = content;
     	Document doc = Jsoup.parse(html);
@@ -45,7 +54,7 @@ public class ContentCatcher
 	
 	static void catchContent()
 	{
-		String urlTemplate = "xxxx";
+		String urlTemplate = "http://www.buyiju.com/guanyin/xx.html";
 		for(int i=1;i<=100;i++)
 		{
 			if(i == 72)
@@ -60,8 +69,34 @@ public class ContentCatcher
 			
 			//System.out.println(ret);
 			
-			DrawResultRsp rsp = ParseContent(ret);
-			
+			DrawResult rsp = ParseContent(ret);
+			rsp.imgUrl = "images/image"+i+".jpg";
+			String type = rsp.type.substring(3);
+			if(type.equals("上签"))
+			{
+				rsp.typeValue = DrawRetType.Great;
+			}
+			else if(type.equals("中上签"))
+			{
+				rsp.typeValue = DrawRetType.Good;
+			}
+			else if(type.equals("中签"))
+			{
+				rsp.typeValue = DrawRetType.Normal;
+			}
+			else if(type.equals("中下签"))
+			{
+				rsp.typeValue = DrawRetType.Low;
+			}
+			else if(type.equals("下签"))
+			{
+				rsp.typeValue = DrawRetType.Bad;
+			}
+			else
+			{
+				rsp.typeValue = DrawRetType.Invalid;
+				System.out.println("type->"+type);
+			}
 			System.out.println(JSONObject.toJSONString(rsp));
 		}
 	}
@@ -71,10 +106,59 @@ public class ContentCatcher
 		DrawManager.getInstance().loadContent();
 	}
 	
+	static void catchImg()
+	{
+		String urlTemplate = "http://www.buyiju.com/guanyin/img/xx.gif";
+		for(int i=1;i<=100;i++)
+		{
+			if(i == 72)
+			{
+				continue;
+			}
+			String urlPath = urlTemplate.replaceAll("xx", i+"");
+			
+			URL url = null;
+			
+			String imageName =  "D:/wxgame_web/images/image"+i+".jpg";
+
+	        try 
+	        {
+	            url = new URL(urlPath);
+	            DataInputStream dataInputStream = new DataInputStream(url.openStream());
+
+	            FileOutputStream fileOutputStream = new FileOutputStream(new File(imageName));
+	            ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+	            byte[] buffer = new byte[1024];
+	            int length;
+
+	            while ((length = dataInputStream.read(buffer)) > 0)
+	            {
+	                output.write(buffer, 0, length);
+	            }
+	           
+	            fileOutputStream.write(output.toByteArray());
+	            dataInputStream.close();
+	            fileOutputStream.close();
+	            
+	            System.out.println("load image"+i);
+	        } 
+	        catch (MalformedURLException e) 
+	        {
+	            e.printStackTrace();
+	        } 
+	        catch (IOException e) 
+	        {
+	            e.printStackTrace();
+	        }
+		}
+	}
+	
 	public static void main(String[] args)
 	{
-		//catchContent();
-		showData();
+		catchContent();
+		//showData();
+		//catchImg();
 	}
 	
 }

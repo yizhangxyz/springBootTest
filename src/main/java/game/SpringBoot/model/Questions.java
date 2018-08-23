@@ -32,7 +32,7 @@ public class Questions
 	{
 		for(QuestionResult questionResult : questionResults)
 		{
-			if(score >= questionResult.min_score && score <= questionResult.max_score)
+			if(score >= questionResult.minScore && score <= questionResult.maxScore)
 			{
 				return questionResult.result;
 			}
