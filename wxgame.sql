@@ -82,7 +82,7 @@ DROP TABLE IF EXISTS `user_tokens`;
 CREATE TABLE `user_tokens`  (
   `token` varchar(255) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL,
   `openId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `updateTime` timestamp(6) DEFAULT NULL,
+  `updateTime` timestamp(6),
   PRIMARY KEY (`token`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -99,8 +99,8 @@ CREATE TABLE `users`  (
   `openId` varchar(255) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL COMMENT 'wx唯一标识',
   `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '服务器生成的标识',
   `sessionKey` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'wx session',
-  `createTime` timestamp(6) DEFAULT NULL COMMENT '账号创建时间',
-  `updateTime` timestamp(6) DEFAULT NULL COMMENT '账号更新时间',
+  `createTime` timestamp(6) COMMENT '账号创建时间',
+  `updateTime` timestamp(6) COMMENT '账号更新时间',
   PRIMARY KEY (`openId`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
