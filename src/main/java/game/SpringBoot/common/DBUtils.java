@@ -1,11 +1,15 @@
 package game.SpringBoot.common;
 
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 
@@ -16,23 +20,47 @@ public class DBUtils {
     public static String PASSWORD;
     public static String DRIVER;
     
-    private static ResourceBundle rb = ResourceBundle.getBundle("db_config");
-    
     private DBUtils(){}
     
     static
     {
-        URL = rb.getString("jdbc.url");
-        USERNAME = rb.getString("jdbc.username");
-        PASSWORD = rb.getString("jdbc.password");
-        DRIVER = rb.getString("jdbc.driver");
+    	LoadDBConfig();
+    }
+    
+    private static void LoadDBConfig()
+    {
+    	BufferedInputStream inputStream = null; 
+    	String proFilePath = System.getProperty("user.dir") +"\\config\\db_config.properties";  
         try
-        {
+        {  
+            inputStream = new BufferedInputStream(new FileInputStream(proFilePath));  
+            ResourceBundle rb = new PropertyResourceBundle(inputStream);  
+            
+            URL = rb.getString("jdbc.url");
+            USERNAME = rb.getString("jdbc.username");
+            PASSWORD = rb.getString("jdbc.password");
+            DRIVER = rb.getString("jdbc.driver");
+            
             Class.forName(DRIVER);
-        } catch (ClassNotFoundException e)
+        } 
+        catch (Exception e) 
+        {  
+            LogUtils.getLogger().info(e.getMessage());
+        } 
+        finally
         {
-            e.printStackTrace();
-        }
+        	if(inputStream != null)
+        	{
+        		try
+				{
+					inputStream.close();
+				}
+				catch (IOException e)
+				{
+					LogUtils.getLogger().info(e.getMessage());
+				}
+        	}
+		}
     }
     
     public static Connection getConnection()

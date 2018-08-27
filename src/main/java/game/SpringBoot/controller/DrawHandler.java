@@ -91,6 +91,8 @@ public class DrawHandler
 		int resultIndex = getResultIndex();
 		if(resultIndex < 0)
 		{
+			LogUtils.getLogger().info("onDraw resultIndex="+resultIndex);
+			
 			DrawRsp drawRsp    = new DrawRsp();
 			drawRsp.resultCode = MessageCode.FAILED;
 			drawRsp.msg        = "no result";
@@ -126,6 +128,8 @@ public class DrawHandler
 		DrawInfo drawInfo = userDrawMap.get(userInfo.openid);
 		if(drawInfo == null)
 		{
+			LogUtils.getLogger().info("onThrowGrail no draw info");
+			
 			ThrowCupRsp throwCupRsp = new ThrowCupRsp();
 			throwCupRsp.resultCode = MessageCode.FAILED;
 			throwCupRsp.msg        = "no draw info";
@@ -167,6 +171,8 @@ public class DrawHandler
 		DrawInfo drawInfo = userDrawMap.get(userInfo.openid);
 		if(drawInfo == null)
 		{
+			LogUtils.getLogger().info("onAnswerTheDraw no draw info");
+			
 			DrawResultRsp rsp = new DrawResultRsp();
 			rsp.resultCode = MessageCode.FAILED;
 			rsp.msg        = "no draw info";
@@ -176,6 +182,8 @@ public class DrawHandler
 		
 		if(drawInfo.grailCount < 3)
 		{
+			LogUtils.getLogger().info("onAnswerTheDraw grailCount < 3");
+			
 			DrawResultRsp rsp = new DrawResultRsp();
 			rsp.resultCode = MessageCode.FAILED;
 			rsp.msg        = "grailCount < 3";
