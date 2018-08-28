@@ -5,12 +5,14 @@ import java.util.List;
 public class ClientMessages
 {
 	public static final int MSG_LOGIN           = 1;     //登录
-	public static final int MSG_QUIZINFO        = 2;     //请求试题
 	public static final int MSG_TEST            = 100;   //测试
 	
 	public static final int MSG_DRAW            = 101;   //求签
 	public static final int MSG_THROW_GRAIL     = 102;   //投掷圣杯
 	public static final int MSG_ANSWER_DRAW     = 103;   //解签
+	
+	public static final int MSG_QUIZ_INFO       = 201;   //请求试题
+	public static final int MSG_QUIZ_SUBMIT     = 202;   //提交测试答案
 	
 	//消息头
 	public static class ClientMessageHeader
@@ -31,11 +33,23 @@ public class ClientMessages
 		public String token;     //用户的每个请求都会带上 
 	}
 	
+	//获取题目
+	public static class GetQuizInfo
+	{
+		public int quizId;
+	}
+		
+	public static class Answer
+	{
+		public int questionIndex;
+		public String answer;
+	}
+	
 	//提交答案
 	public static class PostAnswers
 	{
 		public int quizId;
-		public List<String> answers;
+		public List<Answer> answers;
 	}
 	
 	
@@ -71,7 +85,7 @@ public class ClientMessages
 	//投掷杯子应答
 	public static class ThrowCupRsp extends Response
 	{
-		public boolean isValid;
+		public int checkType;
 		public int times;
 	} 
 	

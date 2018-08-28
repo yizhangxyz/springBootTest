@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 23/08/2018 14:16:43
+ Date: 28/08/2018 17:37:30
 */
 
 SET NAMES utf8mb4;
@@ -22,29 +22,27 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `subject_result`;
 CREATE TABLE `subject_result`  (
-  `id` int(11) NOT NULL COMMENT '答题结果id',
   `subject_id` int(11) NOT NULL COMMENT '题目id',
   `min_score` int(11) NOT NULL COMMENT '分数区间最小值',
   `max_score` int(11) NOT NULL COMMENT '分数区间最大值',
-  `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '答题结果',
-  PRIMARY KEY (`id`) USING BTREE
+  `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '答题结果'
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of subject_result
 -- ----------------------------
-INSERT INTO `subject_result` VALUES (1, 1, 1, 59, '差');
-INSERT INTO `subject_result` VALUES (2, 1, 60, 100, '及格');
+INSERT INTO `subject_result` VALUES (1, 1, 59, '差');
+INSERT INTO `subject_result` VALUES (1, 60, 100, '及格');
 
 -- ----------------------------
 -- Table structure for subject_type
 -- ----------------------------
 DROP TABLE IF EXISTS `subject_type`;
 CREATE TABLE `subject_type`  (
-  `id` int(11) NOT NULL COMMENT '题目id',
+  `subject_id` int(11) NOT NULL COMMENT '题目id',
   `type` int(11) NOT NULL COMMENT '题目类型',
   `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '描述',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`subject_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -57,23 +55,22 @@ INSERT INTO `subject_type` VALUES (1, 1, '普通题目');
 -- ----------------------------
 DROP TABLE IF EXISTS `subjects`;
 CREATE TABLE `subjects`  (
-  `id` int(11) NOT NULL COMMENT '一道题的id',
   `subject_id` int(11) NOT NULL DEFAULT 0 COMMENT '所属题目id',
-  `subject_index` int(11) NOT NULL COMMENT '题目序号',
+  `question_index` int(11) NOT NULL COMMENT '题目序号',
   `score` int(11) NOT NULL DEFAULT 0 COMMENT '题目分数',
   `content` varchar(255) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL COMMENT '内容',
   `answer_type` int(11) NOT NULL DEFAULT 0 COMMENT '答题类型（0单选,1多选）',
   `answer_count` int(11) NOT NULL COMMENT '答案数量',
   `answers` varchar(255) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL DEFAULT '' COMMENT '答案，用\"_\"分隔',
   `weights` varchar(255) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL DEFAULT '0' COMMENT '答案权重，用\"_\"分隔',
-  `analizer` int(11) NOT NULL DEFAULT 0 COMMENT '答案分析器（0无，1权重和为100,）',
-  PRIMARY KEY (`id`) USING BTREE
+  `next_questions` varchar(255) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL COMMENT '选择了不同答案后，转向的下一题',
+  `analizer` int(11) NOT NULL DEFAULT 0 COMMENT '答案分析器（0无，1权重和为100,）'
 ) ENGINE = InnoDB CHARACTER SET = gbk COLLATE = gbk_chinese_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of subjects
 -- ----------------------------
-INSERT INTO `subjects` VALUES (1, 1, 1, 4, '你来自哪个国家？', 0, 4, '中国*美国*日本*英国*', '100*0*0*0*', 1);
+INSERT INTO `subjects` VALUES (1, 1, 4, '你来自哪个国家？', 0, 4, '中国*美国*日本*英国*', '100*0*0*0*', '0*0*0*0*', 1);
 
 -- ----------------------------
 -- Table structure for user_tokens
@@ -89,7 +86,8 @@ CREATE TABLE `user_tokens`  (
 -- ----------------------------
 -- Records of user_tokens
 -- ----------------------------
-INSERT INTO `user_tokens` VALUES ('2cc50e23fee44331ab9e34549717b3ae', 'oubx35IXr4hiswICym1zyID5yPNQ', '2018-08-22 18:21:56.000000');
+INSERT INTO `user_tokens` VALUES ('28dfbcebca194c4e8ebd4ec3fafeab86', 'oubx35IXr4hiswICym1zyID5yPNQ', '2018-08-28 11:36:37.000000');
+INSERT INTO `user_tokens` VALUES ('61e066f957b64df0bc74e6853cc316cb', 'oubx35LXlyCO63TOVIPpFnANhtD0', '2018-08-28 16:44:29.000000');
 
 -- ----------------------------
 -- Table structure for users
@@ -107,14 +105,15 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('oubx35IXr4hiswICym1zyID5yPNQ', '2cc50e23fee44331ab9e34549717b3ae', 'Ij2jgtJIPoVTWWzGmnWkTA==', '2018-08-08 18:06:11.000000', '2018-08-22 18:21:56.000000');
+INSERT INTO `users` VALUES ('oubx35IXr4hiswICym1zyID5yPNQ', '28dfbcebca194c4e8ebd4ec3fafeab86', 'p6FPIgrRMTHx3fZbNyjamA==', '2018-08-08 18:06:11.000000', '2018-08-28 11:36:37.000000');
+INSERT INTO `users` VALUES ('oubx35LXlyCO63TOVIPpFnANhtD0', '61e066f957b64df0bc74e6853cc316cb', '/OrWB+aDYanM19kcPu1Jxg==', '2018-08-28 10:27:39.000000', '2018-08-28 16:44:29.000000');
 
 -- ----------------------------
 -- Procedure structure for create_update_user
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `create_update_user`;
 delimiter ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `create_update_user`(IN `_openid` varchar(255),IN `_token` varchar(255),IN `_sessionKey` varchar(255),IN `_updateTime` timestamp)
+CREATE  PROCEDURE `create_update_user`(IN `_openid` varchar(255),IN `_token` varchar(255),IN `_sessionKey` varchar(255),IN `_updateTime` timestamp)
 BEGIN
 
 	DECLARE ret_ int DEFAULT 0;
@@ -142,7 +141,7 @@ delimiter ;
 -- ----------------------------
 DROP PROCEDURE IF EXISTS `find_user_bytoken`;
 delimiter ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `find_user_bytoken`(IN `_token` varchar(255))
+CREATE  PROCEDURE `find_user_bytoken`(IN `_token` varchar(255))
 BEGIN
 
 	DECLARE ret_         int DEFAULT 1; 

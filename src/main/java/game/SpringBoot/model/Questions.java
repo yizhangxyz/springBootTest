@@ -1,21 +1,34 @@
 package game.SpringBoot.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Questions
 {
-	private List<SubjectDetail> subjects;
+	private List<QuestionDetail> questionDetails = new ArrayList<>();
+
+	private List<QuestionResult> questionResults = new ArrayList<>();
 	
-	private List<QuestionResult> questionResults;
-	
-	public List<SubjectDetail> getSubjects()
+	public QuestionDetail findQuestionDetail(int questionIndex)
 	{
-		return subjects;
+		for(QuestionDetail questionDetail : questionDetails)
+		{
+			if(questionDetail.questionIndex == questionIndex)
+			{
+				return questionDetail;
+			}
+		}
+		return null;
+	}
+	
+	public List<QuestionDetail> getQuestionDetails()
+	{
+		return questionDetails;
 	}
 
-	public void setSubjects(List<SubjectDetail> subjects)
+	public void setQuestionDetails(List<QuestionDetail> questionDetails)
 	{
-		this.subjects = subjects;
+		this.questionDetails = questionDetails;
 	}
 
 	public List<QuestionResult> getQuestionResults()

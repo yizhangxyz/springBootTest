@@ -1,0 +1,4 @@
+{"maxScore":10,"minScore":10,"result":"A"}
+{"maxScore":20,"minScore":20,"result":"B"}
+{"maxScore":30,"minScore":30,"result":"C"}
+{"maxScore":40,"minScore":40,"result":"D"}

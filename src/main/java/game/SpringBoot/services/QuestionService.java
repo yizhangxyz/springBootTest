@@ -15,7 +15,7 @@ public class QuestionService
 	{
 		Questions questions = subjectDao.findQuestion(id);
 		
-		if(questions.getSubjects().size() == 0)
+		if(questions.getQuestionDetails().size() == 0)
 		{
 			return null;
 		}

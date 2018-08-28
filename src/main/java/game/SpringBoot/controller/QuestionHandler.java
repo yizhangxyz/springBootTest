@@ -10,7 +10,6 @@ import game.SpringBoot.message.ClientMessages.PostAnswers;
 import game.SpringBoot.message.ClientMessages.QuizRsp;
 import game.SpringBoot.message.MessageCode;
 import game.SpringBoot.model.Questions;
-import game.SpringBoot.model.UserAnswers;
 import game.SpringBoot.model.UserInfo;
 
 @Component
@@ -22,12 +21,11 @@ public class QuestionHandler
 		return JSONObject.toJSONString(questions);
     }
 	
-	public String onPostAnswers(UserInfo userInfo,String msgData)
+	public String onSubmitAnswers(UserInfo userInfo,String msgData)
 	{
 		PostAnswers postAnswers = JSONObject.parseObject(msgData, PostAnswers.class);
 		
 		Questions questions = QuestionManager.getInstance().getQuestion(postAnswers.quizId);
-		UserAnswers userAnswers = new UserAnswers(postAnswers);
 		
 		if(questions == null)
 		{
@@ -39,7 +37,7 @@ public class QuestionHandler
 		}
 
 		
-		int score = QuestionAnalizer.analize(userAnswers,questions);
+		int score = QuestionAnalizer.analize(postAnswers,questions);
 		
 		QuizRsp rsp = new QuizRsp();
 		rsp.resultCode = MessageCode.SUCCESS;

@@ -32,6 +32,7 @@ public class DrawHandler
 		int drawIndex;       //求签序号
 		int resultIndex;     //解签结果序号
 		int grailCount;      //圣杯次数
+		int throwCount;      //投掷次数
 		boolean finished;    //是否结束
 		long createTime;     //创建时间
 		long finishTime;     //结束时间
@@ -72,7 +73,7 @@ public class DrawHandler
 				list.add(drawInfo.openId);
 			}
 			//已经结束，当日存储
-			else if(drawInfo.finished && currentDay > drawInfo.finishDay)
+			else if(drawInfo.finished && currentDay != drawInfo.finishDay)
 			{
 				list.add(drawInfo.openId);
 			}
@@ -106,6 +107,7 @@ public class DrawHandler
 		drawInfo.drawIndex   = drawIndex;
 		drawInfo.resultIndex = resultIndex;
 		drawInfo.grailCount  = 0;
+		drawInfo.throwCount  = 0;
 		drawInfo.finished    = false;
 		drawInfo.createTime  = System.currentTimeMillis();
 		
@@ -137,16 +139,30 @@ public class DrawHandler
 			return JSONObject.toJSONString(throwCupRsp); 
 		}
 		
-		boolean success = true;
+		int throwType = 1;
 		if(drawInfo.grailCount < 3)
 		{
 			int num = new Random().nextInt(100);
-			if(num < 15)
+			if(num < 40)
 			{
-				success = false;
+				throwType = 1;
+			}
+			else if(num < 85)
+			{
+				throwType = 2;
+			}
+			else if(num < 92)
+			{
+				throwType = 3;
+			}
+			else
+			{
+				throwType = 4;
 			}
 			
-			if(success)
+			drawInfo.throwCount++;
+			//1、2就是是圣杯
+			if(throwType == 1 || throwType == 2)
 			{
 				drawInfo.grailCount++;
 			}
@@ -159,8 +175,8 @@ public class DrawHandler
 		
 		ThrowCupRsp throwCupRsp = new ThrowCupRsp();
 		throwCupRsp.resultCode = MessageCode.SUCCESS;
-		throwCupRsp.isValid    = success;
-		throwCupRsp.times      = drawInfo.grailCount;
+		throwCupRsp.checkType  = throwType;
+		throwCupRsp.times      = drawInfo.throwCount;
 		
 		return JSONObject.toJSONString(throwCupRsp);
 	}

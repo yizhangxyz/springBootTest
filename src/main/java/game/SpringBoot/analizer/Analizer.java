@@ -3,11 +3,11 @@ package game.SpringBoot.analizer;
 import java.util.HashMap;
 import java.util.Map;
 
-import game.SpringBoot.model.SubjectDetail;
+import game.SpringBoot.model.QuestionDetail;
 
 public abstract class Analizer
 {
-	public abstract int analize(SubjectDetail subject,String answer);
+	public abstract int analize(QuestionDetail subject,String answer);
 	
 	private static final int WEIGHT_CHECK     = 1;
 	private static final int RANDOM_BY_WEIGHT = 2;

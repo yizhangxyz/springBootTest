@@ -1,26 +1,26 @@
 package game.SpringBoot.analizer;
 
-import game.SpringBoot.model.SubjectDetail;
+import game.SpringBoot.model.QuestionDetail;
 
 public class WeightCheck extends Analizer
 {
 	private static final int TOTAL_WEIGHT = 100;
 
-	@Override public int analize(SubjectDetail subject, String answer)
+	@Override public int analize(QuestionDetail subject, String answer)
 	{
-		int value = Integer.parseInt(answer);
-		byte bits[] = Analizer.getBitsArray(value);
+		String[] sArray= answer.split("\\,");
+		
 		int totalWeight = 0;
-		for(int i=0;i<4;i++)
+		for(String s : sArray)
 		{
-			if(bits[i] == 1)
+			int answerIndex = Integer.parseInt(s);
+			if(answerIndex >=1 && answerIndex <= subject.answerCount)
 			{
-				totalWeight += subject.weights[i];
+				totalWeight += subject.weights[answerIndex-1];
 			}
 		}
 		
-		float percent = (float)totalWeight/TOTAL_WEIGHT;
-		return (int)(percent*subject.score);
+		return totalWeight*subject.score/TOTAL_WEIGHT;
 	}
 
 }

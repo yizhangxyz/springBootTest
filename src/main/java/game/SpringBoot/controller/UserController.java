@@ -46,12 +46,14 @@ public class UserController
     public void init()
     {
     	messeDispatcher.registerMsg(ClientMessages.MSG_LOGIN,        loginHandler,    "onLogin");
-    	messeDispatcher.registerMsg(ClientMessages.MSG_QUIZINFO,     questionHandler, "onGetQuizInfo");
 		messeDispatcher.registerMsg(ClientMessages.MSG_TEST,         testHandler,     "onTest");
 		
 		messeDispatcher.registerMsg(ClientMessages.MSG_DRAW,         drawHandler,     "onDraw");
 		messeDispatcher.registerMsg(ClientMessages.MSG_THROW_GRAIL,  drawHandler,     "onThrowGrail");
 		messeDispatcher.registerMsg(ClientMessages.MSG_ANSWER_DRAW,  drawHandler,     "onAnswerTheDraw");
+		
+		messeDispatcher.registerMsg(ClientMessages.MSG_QUIZ_INFO,    questionHandler, "onGetQuizInfo");
+		messeDispatcher.registerMsg(ClientMessages.MSG_QUIZ_SUBMIT,  questionHandler, "onSubmitAnswers");
     }
 	
 	@GetMapping("/testLogin")
@@ -63,7 +65,7 @@ public class UserController
 	@GetMapping("/testGetQuizInfo")
 	public String testGetQuizInfo()
 	{
-		return onUserAction("{\"msg_id\":2,\"msg_data\":{\"token\":\"98d5b6f3d3ec4fb2bbaccbfddf4c53c0\"}}");
+		return onUserAction("{\"msg_id\":2,\"msg_data\":{\"token\":\"d4e4d08fe2d647b8b1972a7b19054d23\"}}");
 	}
 	
 	@PostMapping("/userAction")
@@ -94,7 +96,7 @@ public class UserController
 			{
 				Response rsp = new Response();
 			    rsp.resultCode = MessageCode.CODE_RELOGIN;
-			    rsp.msg        = "please relogin by code.";
+			    rsp.msg        = "请用code重新登录。";
 			    	
 			    return JSONObject.toJSONString(rsp);
 			}

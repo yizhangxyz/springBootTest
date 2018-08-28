@@ -1,14 +1,18 @@
 package game.SpringBoot.manager;
 
-import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import com.alibaba.fastjson.JSONObject;
 
 import game.SpringBoot.common.LogUtils;
+import game.SpringBoot.model.QuestionDetail;
+import game.SpringBoot.model.QuestionResult;
 import game.SpringBoot.model.Questions;
-import game.SpringBoot.services.QuestionService;
 
 public class QuestionManager
 {
@@ -19,10 +23,7 @@ public class QuestionManager
 	
 	private Map<Integer, Questions> questionsMap = new HashMap<>();
 	
-	private static final ReadWriteLock lock = new ReentrantReadWriteLock();
-	
-	private QuestionService questionService = new QuestionService();
-	
+
 	public static QuestionManager getInstance()
 	{
 		return QuestionManagerHolder.instance;
@@ -30,50 +31,70 @@ public class QuestionManager
 	
 	private QuestionManager()
 	{
-		
+	}
+	
+	static
+	{
+		QuestionManager.getInstance().loadQuestions(1);
 	}
 	
 	public Questions getQuestion(int id)
 	{
-		Questions questions = null;
-		
-		lock.readLock().lock();
+		return questionsMap.get(id);
+	}
+	
+	public void loadQuestions(int questionId)
+	{
+		Questions questions = new Questions();
 		try
 		{
-			questions = questionsMap.get(id);
-		}
-		finally
-		{
-			lock.readLock().unlock();
-		}
-		
-		if(questions != null)
-		{
-			return questions;
-		}
-		
-		try
-		{
-			questions = questionService.findByQuestionId(id);
-			if(questions != null)
-			{
-				lock.writeLock().lock();
-				try
-				{
-					questionsMap.put(id,questions);
-					LogUtils.getLogger().info("cache questions count="+questionsMap.size());
-				}
-				finally
-				{
-					lock.writeLock().unlock();
-				}
-			}
+			loadQuestionDetails(questions,questionId);
+			loadQuestionResults(questions,questionId);
 			
+			questionsMap.remove(questionId);
+			questionsMap.put(questionId, questions);
 		}
-		catch (SQLException e)
+		catch (IOException e)
 		{
-			LogUtils.getLogger().info(e.toString());
+			LogUtils.getLogger().info(e.getMessage());
 		}
-		return questions;
+	}
+	
+	private void loadQuestionDetails(Questions questions,int questionId) throws IOException
+	{
+		String filePath = System.getProperty("user.dir") +"\\game_data\\questions_"+questionId+".txt";  
+		
+		//FileReader fr = new FileReader(filePath);
+		InputStreamReader isr = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
+		BufferedReader bf = new BufferedReader(isr);
+		String str;
+		
+		while ((str = bf.readLine()) != null) 
+		{
+			QuestionDetail questionDetail = JSONObject.parseObject(str, QuestionDetail.class);
+			questions.getQuestionDetails().add(questionDetail);
+		}
+		
+		bf.close();
+		isr.close();
+	}
+	
+	private void loadQuestionResults(Questions questions,int questionId) throws IOException
+	{
+		String filePath = System.getProperty("user.dir") +"\\game_data\\questions_results_"+questionId+".txt";  
+		
+		//FileReader fr = new FileReader(filePath);
+		InputStreamReader isr = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
+		BufferedReader bf = new BufferedReader(isr);
+		String str;
+		
+		while ((str = bf.readLine()) != null) 
+		{
+			QuestionResult questionResult = JSONObject.parseObject(str, QuestionResult.class);
+			questions.getQuestionResults().add(questionResult);
+		}
+		
+		bf.close();
+		isr.close();
 	}
 }

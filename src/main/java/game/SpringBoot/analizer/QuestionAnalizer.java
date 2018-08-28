@@ -1,30 +1,35 @@
 package game.SpringBoot.analizer;
 
 import game.SpringBoot.common.LogUtils;
+import game.SpringBoot.message.ClientMessages.Answer;
+import game.SpringBoot.message.ClientMessages.PostAnswers;
+import game.SpringBoot.model.QuestionDetail;
 import game.SpringBoot.model.Questions;
-import game.SpringBoot.model.SubjectDetail;
-import game.SpringBoot.model.UserAnswers;
 
 public class QuestionAnalizer
 {
-	public static int analize(UserAnswers userAnswers,Questions questions)
+	public static int analize(PostAnswers userAnswers,Questions questions)
 	{
-		if(userAnswers.getAnswers().size() != questions.getSubjects().size())
+		if(userAnswers.answers.size() > questions.getQuestionDetails().size())
 		{
-			LogUtils.getLogger().info("answer count="+userAnswers.getAnswers()+" question count="+questions.getSubjects().size());
+			LogUtils.getLogger().info("answer count="+userAnswers.answers+" question count="+questions.getQuestionDetails().size());
 			return 0;
 		}
 		
 		int score = 0;
-		for(int i=0;i<userAnswers.getAnswers().size();i++)
+		for(Answer answer : userAnswers.answers)
 		{
-			score += analizeSubject(questions.getSubjects().get(i),userAnswers.getAnswers().get(i));
+			QuestionDetail questionDetail = questions.findQuestionDetail(answer.questionIndex);
+			if(questionDetail != null)
+			{
+				score += analizeSubject(questionDetail,answer.answer);
+			}
 		}
 		return score;
 	}
 	
 	
-	private static int analizeSubject(SubjectDetail subject,String answer)
+	private static int analizeSubject(QuestionDetail subject,String answer)
 	{
 		Analizer analizer = Analizer.getAnalizer(subject.analizer);
 		if(analizer != null)

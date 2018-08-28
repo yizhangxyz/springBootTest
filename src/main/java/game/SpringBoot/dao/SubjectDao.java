@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.SpringBoot.common.DBUtils;
+import game.SpringBoot.model.QuestionDetail;
 import game.SpringBoot.model.QuestionResult;
 import game.SpringBoot.model.Questions;
-import game.SpringBoot.model.SubjectDetail;
 
 public class SubjectDao
 {
-	public void insertSubject(SubjectDetail subject) throws SQLException
+	public void insertSubject(QuestionDetail subject) throws SQLException
     {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -23,9 +23,6 @@ public class SubjectDao
         {
             conn = DBUtils.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, subject.id);
-            ps.setInt(2, subject.subjectId);
-            ps.setInt(3, subject.subjectIndex);
             ps.setInt(4, subject.score);
             ps.setString(5, subject.content);
             ps.setInt(6, subject.answerType);
@@ -54,8 +51,6 @@ public class SubjectDao
         {
             conn = DBUtils.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, questionResult.id);
-            ps.setInt(2, questionResult.subjectId);
             ps.setInt(3, questionResult.minScore);
             ps.setInt(4, questionResult.maxScore);
             ps.setString(5, questionResult.result);
@@ -88,26 +83,24 @@ public class SubjectDao
             
             Questions questions = new Questions();
             
-            List<SubjectDetail> subjects = new ArrayList<>();
+            List<QuestionDetail> questionDetails = new ArrayList<>();
             while(rs.next())
             {
-            	SubjectDetail subjectDetail = new SubjectDetail();
+            	QuestionDetail detail = new QuestionDetail();
             	
-            	subjectDetail.id = rs.getInt(1);
-            	subjectDetail.subjectId = rs.getInt(2);
-            	subjectDetail.subjectIndex = rs.getInt(3);
-            	subjectDetail.score = rs.getInt(4);
-            	subjectDetail.content = rs.getString(5);
-            	subjectDetail.answerType = rs.getInt(6);
-            	subjectDetail.answerCount = rs.getInt(7);
-            	subjectDetail.setAnswers(rs.getString(8));
-            	subjectDetail.setWeights(rs.getString(9));
-            	subjectDetail.analizer = rs.getInt(10);
+
+            	detail.score = rs.getInt(4);
+            	detail.content = rs.getString(5);
+            	detail.answerType = rs.getInt(6);
+            	detail.answerCount = rs.getInt(7);
+            	detail.setAnswers(rs.getString(8));
+            	detail.setWeights(rs.getString(9));
+            	detail.analizer = rs.getInt(10);
             	
-            	subjects.add(subjectDetail);
+            	questionDetails.add(detail);
             	
             }
-            questions.setSubjects(subjects);
+            questions.setQuestionDetails(questionDetails);
             
             return questions;
         }
@@ -140,9 +133,7 @@ public class SubjectDao
             while(rs.next())
             {
             	QuestionResult questionResult = new QuestionResult();
-            	
-            	questionResult.id = rs.getInt(1);
-            	questionResult.subjectId = rs.getInt(2);
+
             	questionResult.minScore = rs.getInt(3);
             	questionResult.maxScore = rs.getInt(4);
             	questionResult.result = rs.getString(5);

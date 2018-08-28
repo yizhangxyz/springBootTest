@@ -1,8 +1,9 @@
 package game.SpringBoot.manager;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +40,11 @@ public class DrawManager
 		{
 			resultList.clear();
 			
-	        String filePath = DrawManager.class.getResource("/draw_results.txt").getPath();  
+			String filePath = System.getProperty("user.dir") +"\\game_data\\draw_results.txt";  
 
-			FileReader fr = new FileReader(filePath);
-			BufferedReader bf = new BufferedReader(fr);
+			//FileReader fr = new FileReader(filePath);
+			InputStreamReader isr = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
+			BufferedReader bf = new BufferedReader(isr);
 			String str;
 			
 			while ((str = bf.readLine()) != null) 
@@ -51,7 +53,7 @@ public class DrawManager
 				resultList.add(result);
 			}
 			bf.close();
-			fr.close();
+			isr.close();
 		}
 		catch (IOException e)
 		{
