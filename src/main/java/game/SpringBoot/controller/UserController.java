@@ -17,6 +17,7 @@ import game.SpringBoot.controller.MesseDispatcher.MsgHandler;
 import game.SpringBoot.manager.UserManager;
 import game.SpringBoot.message.ClientMessages;
 import game.SpringBoot.message.ClientMessages.ClientMessageHeader;
+import game.SpringBoot.message.ClientMessages.RequestMsgData;
 import game.SpringBoot.message.ClientMessages.Response;
 import game.SpringBoot.message.MessageCode;
 import game.SpringBoot.model.UserInfo;
@@ -74,7 +75,11 @@ public class UserController
 		String postData = MyHttpClient.getPostData(request);
 		LogUtils.getLogger().info("postData="+postData);
 		
-		return onUserAction(postData);
+		String ret = onUserAction(postData);
+		
+		LogUtils.getLogger().info("responseData="+ret);
+		
+		return ret;
     }
 	
 	private String onUserAction(String postData)
@@ -87,11 +92,24 @@ public class UserController
 			return "";
 		}
 		
+		//交给handler处理的数据
+		String handlerMsg = message.msgData;
+		
 		UserInfo userInfo = null;
-		//非登录信息验证是否登录
+		//非登录信息
 		if(message.msgId != ClientMessages.MSG_LOGIN)
 		{
-			userInfo = loginValidate.validate(message.msgData);
+			RequestMsgData req = JSONObject.parseObject(message.msgData, RequestMsgData.class);
+			if(req == null || req.token == null)
+	        {
+	        	LogUtils.getLogger().info("parse RequestMsgData error.msgData="+message.msgData);
+	        	return "";
+	        }
+
+			handlerMsg = req.data;
+			
+			//验证是否登录
+			userInfo = loginValidate.validate(req.token);
 			if(userInfo == null)
 			{
 				Response rsp = new Response();
@@ -107,7 +125,7 @@ public class UserController
 		MsgHandler handler = messeDispatcher.getHandler(message.msgId);
 		if(handler != null)
 		{
-			return handler.invoke(userInfo,message.msgData);
+			return handler.invoke(userInfo,handlerMsg);
 		}
 		else
 		{

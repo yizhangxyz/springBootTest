@@ -31,6 +31,7 @@ public class ClientMessages
 	public static class RequestMsgData
 	{
 		public String token;     //用户的每个请求都会带上 
+		public String data;      //用户的请求数据 
 	}
 	
 	//获取题目
