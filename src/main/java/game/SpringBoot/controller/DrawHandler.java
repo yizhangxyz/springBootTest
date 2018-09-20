@@ -17,6 +17,7 @@ import game.SpringBoot.common.LogUtils;
 import game.SpringBoot.manager.DrawManager;
 import game.SpringBoot.message.ClientMessages.DrawResultRsp;
 import game.SpringBoot.message.ClientMessages.DrawRsp;
+import game.SpringBoot.message.ClientMessages.DrawlotStateRsp;
 import game.SpringBoot.message.ClientMessages.ThrowCupRsp;
 import game.SpringBoot.message.MessageCode;
 import game.SpringBoot.model.DrawResult;
@@ -25,6 +26,14 @@ import game.SpringBoot.model.UserInfo;
 @Component
 public class DrawHandler
 {
+	//游戏类型
+	static class DrawlotState
+	{
+		public static final int DRAW_INVALID        = 0;   //无效
+		public static final int DRAW_NOT_DO         = 1;   //今日未求签
+		public static final int DRAW_HAS_DONE       = 2;   //今日已求签
+	}
+		
 	//求签信息
 	static class DrawInfo
 	{
@@ -206,25 +215,39 @@ public class DrawHandler
 
 			return JSONObject.toJSONString(rsp);
 		}
-		drawInfo.finished    = true;
-		drawInfo.finishTime  = System.currentTimeMillis();
-		//冗余，避免不停的计算
-		drawInfo.finishDay   = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-
+		
+		if(!drawInfo.finished)
+		{
+			drawInfo.finished    = true;
+			drawInfo.finishTime  = System.currentTimeMillis();
+			//冗余，避免不停的计算
+			drawInfo.finishDay   = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+		}
+		
 		DrawResult result = DrawManager.getInstance().getResultList().get(drawInfo.resultIndex);
 		
-		DrawResultRsp rsp = new DrawResultRsp();
+		DrawResultRsp rsp = result.buildResultRsp();
 		rsp.resultCode = MessageCode.SUCCESS;
-		rsp.title      = result.title;
-		rsp.type       = result.type;
-		rsp.typeValue  = result.typeValue;
-		rsp.verse      = result.verse;
-		rsp.lotInfo    = result.lotInfo;
-		rsp.answer     = result.answer;
-		rsp.lucky      = result.lucky;
-		rsp.story      = result.story;
-		rsp.imgUrl     = result.imgUrl;
-
+		
+		return JSONObject.toJSONString(rsp);
+		
+    }
+	
+	//进入求签房间，则返回今日抽签状态
+	public String onEnterDraw(UserInfo userInfo,String msgData)
+	{
+		DrawInfo drawInfo = userDrawMap.get(userInfo.openid);
+		if(drawInfo == null || !drawInfo.finished)
+		{
+			DrawlotStateRsp rsp = new DrawlotStateRsp();
+			rsp.resultCode   = MessageCode.SUCCESS;
+			rsp.playerState    = DrawlotState.DRAW_NOT_DO;
+			return JSONObject.toJSONString(rsp);
+		}
+		
+		DrawlotStateRsp rsp = new DrawlotStateRsp();
+		rsp.resultCode   = MessageCode.SUCCESS;
+		rsp.playerState    = DrawlotState.DRAW_HAS_DONE;
 		return JSONObject.toJSONString(rsp);
     }
 	

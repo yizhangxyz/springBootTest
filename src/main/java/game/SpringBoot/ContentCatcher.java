@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -46,6 +47,14 @@ public class ContentCatcher
     		
     		lucky  =  doc.select("body").get(0).select("p").get(7).ownText();
     		story  =  doc.select("body").get(0).select("p").get(8).ownText();
+    	}
+    	else if(index == 87)
+    	{
+    		story  =  doc.select("body").get(0).select("p").get(7).ownText();
+    	}
+    	else if(index == 3)
+    	{
+    		story  =  doc.select("body").get(0).select("p").get(7).ownText();
     	}
     	else if(index == 10)
     	{
@@ -91,6 +100,8 @@ public class ContentCatcher
 	
 	static void catchContent()
 	{
+		StringBuilder buffer = new StringBuilder();
+		
 		String urlTemplate = "http://www.buyiju.com/guanyin/xx.html";
 		for(int i=1;i<=100;i++)
 		{
@@ -134,7 +145,22 @@ public class ContentCatcher
 				rsp.typeValue = DrawRetType.Invalid;
 				System.out.println("type->"+type);
 			}
-			System.out.println(JSONObject.toJSONString(rsp));
+			String result = JSONObject.toJSONString(rsp);
+			System.out.println(result);
+			buffer.append(result+"\n");
+		}
+		
+		FileWriter writer;
+		try
+		{
+			writer = new FileWriter("game_data/draw_results.txt");
+			writer.write(buffer.toString());
+	    	writer.close();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -193,8 +219,8 @@ public class ContentCatcher
 	
 	public static void main(String[] args)
 	{
-		catchContent();
-		//showData();
+		//catchContent();
+		showData();
 		//catchImg();
 	}
 	

@@ -44,7 +44,10 @@ public class WebMvcConfig extends WebMvcConfigurationSupport
 	@Bean
     public HttpMessageConverter<String> responseBodyConverter()
 	{
-        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+		StringHttpMessageConverter converter =  new StringHttpMessageConverter(Charset.forName("UTF-8"));
+		//去掉Accept-Charset（内容太大了）
+		converter.setWriteAcceptCharset(false);
+		return converter;
     }
 
     @Override

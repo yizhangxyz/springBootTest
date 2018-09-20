@@ -17,8 +17,8 @@ public class QuestionHandler
 {
 	public String onGetQuizInfo(UserInfo userInfo,String msgData)
 	{
-		Questions questions = QuestionManager.getInstance().getQuestion(1);
-		return JSONObject.toJSONString(questions);
+		Questions questions = QuestionManager.getInstance().getRandomQuestion();
+		return JSONObject.toJSONString(questions.getQuestionsView());
     }
 	
 	public String onSubmitAnswers(UserInfo userInfo,String msgData)
@@ -45,5 +45,11 @@ public class QuestionHandler
 		rsp.score      = score;
 		
 		return JSONObject.toJSONString(rsp);
+    }
+	
+	//进入测试房间
+	public String onEnterTest(UserInfo userInfo,String msgData)
+	{
+		return "";
     }
 }

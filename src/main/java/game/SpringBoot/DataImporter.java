@@ -13,6 +13,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 
+import game.SpringBoot.model.QuestionConfig;
 import game.SpringBoot.model.QuestionDetail;
 import game.SpringBoot.model.QuestionResult;
 import jxl.Sheet;
@@ -160,15 +161,57 @@ public class DataImporter
 		System.out.println("create questionResult success, count="+successCount);
 	}
 	
+	public void importConfigData(List<List<String>> excelList,int questionId)
+	{
+		Map<String, Integer> titleIndexMap = new HashMap<>();
+		List<String> tileList = excelList.get(0);
+    	for (int i = 0; i < tileList.size(); i++)
+    	{
+    		titleIndexMap.put(tileList.get(i), i);
+    	}
+
+    	int titleIndex   = titleIndexMap.get("title");
+    	
+    	List<String> configlist = excelList.get(1);
+    
+    	QuestionConfig config = new QuestionConfig();
+    	config.title = configlist.get(titleIndex);
+    	
+		try 
+    	{
+        	FileWriter writer=new FileWriter("game_data/questions_config_"+questionId+".txt");
+        	writer.write(JSONObject.toJSONString(config));
+        	writer.close();
+        }
+        catch (IOException e)
+        {
+        	System.out.println(e.getMessage());
+        }
+		System.out.println(JSONObject.toJSONString(config));
+		System.out.println("create questionConfig success");
+	}
+	
 	public static void main(String[] args)
 	{
 		DataImporter dataImporter = new DataImporter();
 		
-		int questionId = 1;
-		List<List<String>> questionList = dataImporter.readExcel("game_data/questions_"+questionId+".xls",0);
-	    dataImporter.importQuestionData(questionList,questionId);
-	    
-	    List<List<String>> resultList = dataImporter.readExcel("game_data/questions_"+questionId+".xls",1);
-	    dataImporter.importResultData(resultList,questionId);
+		int questionIds[] = {1,2};
+		for(int i=0;i<questionIds.length;i++)
+		{
+			int questionId = questionIds[i];
+			System.out.println("import question "+questionId+" start=========================================");
+			
+			List<List<String>> questionList = dataImporter.readExcel("game_data/questions_"+questionId+".xls",0);
+		    dataImporter.importQuestionData(questionList,questionId);
+		    
+		    List<List<String>> resultList = dataImporter.readExcel("game_data/questions_"+questionId+".xls",1);
+		    dataImporter.importResultData(resultList,questionId);
+		    
+		    List<List<String>> configList = dataImporter.readExcel("game_data/questions_"+questionId+".xls",2);
+		    dataImporter.importConfigData(configList, questionId);
+		    
+		    System.out.println("import question "+questionId+" success=========================================");
+		}
+		
 	}
 }

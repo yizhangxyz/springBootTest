@@ -42,15 +42,18 @@ public class DrawManager
 			
 			String filePath = System.getProperty("user.dir") +"\\game_data\\draw_results.txt";  
 
-			//FileReader fr = new FileReader(filePath);
 			InputStreamReader isr = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
 			BufferedReader bf = new BufferedReader(isr);
 			String str;
 			
+			int count = 1;
 			while ((str = bf.readLine()) != null) 
 			{
 				DrawResult result = JSONObject.parseObject(str, DrawResult.class);
 				resultList.add(result);
+				System.out.println("========================================="+count);
+				System.out.println(result.story);
+				count++;
 			}
 			bf.close();
 			isr.close();

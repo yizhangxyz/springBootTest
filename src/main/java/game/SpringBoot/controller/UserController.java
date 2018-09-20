@@ -17,6 +17,7 @@ import game.SpringBoot.controller.MesseDispatcher.MsgHandler;
 import game.SpringBoot.manager.UserManager;
 import game.SpringBoot.message.ClientMessages;
 import game.SpringBoot.message.ClientMessages.ClientMessageHeader;
+import game.SpringBoot.message.ClientMessages.EnterGame;
 import game.SpringBoot.message.ClientMessages.RequestMsgData;
 import game.SpringBoot.message.ClientMessages.Response;
 import game.SpringBoot.message.MessageCode;
@@ -25,6 +26,14 @@ import game.SpringBoot.model.UserInfo;
 @RestController
 public class UserController
 {
+	//游戏类型
+	static class GameType
+	{
+		public static final int GAME_INVALID        = 0;   //无效类型
+		public static final int GAME_DRAWLOT        = 1;   //求签
+		public static final int GAME_TRY_TEST       = 2;   //测试
+	}
+	
 	@Autowired
 	private LoginHandler loginHandler;
 	
@@ -49,6 +58,9 @@ public class UserController
     	messeDispatcher.registerMsg(ClientMessages.MSG_LOGIN,        loginHandler,    "onLogin");
 		messeDispatcher.registerMsg(ClientMessages.MSG_TEST,         testHandler,     "onTest");
 		
+		messeDispatcher.registerMsg(ClientMessages.MSG_ENTER_DRAW,   drawHandler,     "onEnterDraw");
+		messeDispatcher.registerMsg(ClientMessages.MSG_ENTER_TEST,   questionHandler, "onEnterTest");
+		
 		messeDispatcher.registerMsg(ClientMessages.MSG_DRAW,         drawHandler,     "onDraw");
 		messeDispatcher.registerMsg(ClientMessages.MSG_THROW_GRAIL,  drawHandler,     "onThrowGrail");
 		messeDispatcher.registerMsg(ClientMessages.MSG_ANSWER_DRAW,  drawHandler,     "onAnswerTheDraw");
@@ -56,13 +68,7 @@ public class UserController
 		messeDispatcher.registerMsg(ClientMessages.MSG_QUIZ_INFO,    questionHandler, "onGetQuizInfo");
 		messeDispatcher.registerMsg(ClientMessages.MSG_QUIZ_SUBMIT,  questionHandler, "onSubmitAnswers");
     }
-	
-	@GetMapping("/testLogin")
-	public String testLogin()
-	{
-		return onUserAction("{\"msg_id\":1,\"msg_data\":{\"code\":\"033Py3X80lCT5H1QuTX80kf6X80Py3XC\"}}");
-	}
-	
+
 	@GetMapping("/testGetQuizInfo")
 	public String testGetQuizInfo()
 	{
@@ -94,10 +100,11 @@ public class UserController
 		
 		//交给handler处理的数据
 		String handlerMsg = message.msgData;
+		int messgeId = message.msgId;
 		
 		UserInfo userInfo = null;
-		//非登录信息
-		if(message.msgId != ClientMessages.MSG_LOGIN)
+		//非登录信息，验证是否登录
+		if(messgeId != ClientMessages.MSG_LOGIN)
 		{
 			RequestMsgData req = JSONObject.parseObject(message.msgData, RequestMsgData.class);
 			if(req == null || req.token == null)
@@ -108,7 +115,7 @@ public class UserController
 
 			handlerMsg = req.data;
 			
-			//验证是否登录
+			//验证登录
 			userInfo = loginValidate.validate(req.token);
 			if(userInfo == null)
 			{
@@ -122,7 +129,25 @@ public class UserController
 			userInfo.expireTime = System.currentTimeMillis()+UserManager.UserCacheTime;
 		}
 		
-		MsgHandler handler = messeDispatcher.getHandler(message.msgId);
+		//消息id转换
+		if(messgeId == ClientMessages.MSG_ENTER_GAME)
+		{
+			EnterGame enterGame = JSONObject.parseObject(handlerMsg, EnterGame.class);
+			switch (enterGame.gameType)
+			{
+			case GameType.GAME_DRAWLOT:
+				messgeId = ClientMessages.MSG_ENTER_DRAW;
+				break;
+			case GameType.GAME_TRY_TEST:
+				messgeId = ClientMessages.MSG_ENTER_TEST;
+				break;
+			default:
+				break;
+			}
+		}
+		
+		//消息派发
+		MsgHandler handler = messeDispatcher.getHandler(messgeId);
 		if(handler != null)
 		{
 			return handler.invoke(userInfo,handlerMsg);

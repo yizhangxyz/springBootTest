@@ -1,11 +1,16 @@
 package game.SpringBoot.message;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientMessages
 {
 	public static final int MSG_LOGIN           = 1;     //登录
 	public static final int MSG_TEST            = 100;   //测试
+	
+	public static final int MSG_ENTER_GAME      = 10;    //进入游戏
+	public static final int MSG_ENTER_DRAW      = 11;    //进入抽签
+	public static final int MSG_ENTER_TEST      = 12;    //进入测试
 	
 	public static final int MSG_DRAW            = 101;   //求签
 	public static final int MSG_THROW_GRAIL     = 102;   //投掷圣杯
@@ -32,6 +37,12 @@ public class ClientMessages
 	{
 		public String token;     //用户的每个请求都会带上 
 		public String data;      //用户的请求数据 
+	}
+	
+	//进入游戏
+	public static class EnterGame
+	{
+		public int gameType;      //游戏id
 	}
 	
 	//获取题目
@@ -67,12 +78,6 @@ public class ClientMessages
 	public static class UserLoginRsp extends Response
 	{
 		public String token;
-	} 
-	
-	//答题结果
-	public static class QuizRsp extends Response
-	{
-		public int score;
 	} 
 	
 	//求签应答
@@ -112,5 +117,37 @@ public class ClientMessages
 		public String lucky;     //仙机
 		public String story;     //故事
 		public String imgUrl;    //图解
+	}
+	
+	//今日求签状态
+	public static class DrawlotStateRsp extends Response
+	{
+		public int playerState;
+	} 
+	
+	//答题结果
+	public static class QuizRsp extends Response
+	{
+		public int score;
+	} 
+
+	//返回客户端的一个题目
+	public static class QuestionView
+	{
+		public int questionIndex;
+		public int score;
+		public String content;
+		public int answerType;
+		public int answerCount;
+		public String answers;
+		public String nextQuestions;
+	}
+	
+	//返回客户端的一套题
+	public static class QuestionsRsp
+	{
+		public int quizId;
+		public String quizTitle;
+		public List<QuestionView> questionsView = new ArrayList<>();
 	}
 }
