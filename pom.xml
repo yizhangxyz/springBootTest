@@ -120,6 +120,12 @@
 		    <version>1.11.3</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis</artifactId>
+		    <version>3.4.6</version>
+		</dependency>
+		
 	</dependencies>
 
     <!-- 打包spring boot应用 -->

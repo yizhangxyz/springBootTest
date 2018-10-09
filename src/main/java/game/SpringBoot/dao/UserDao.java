@@ -3,7 +3,6 @@ package game.SpringBoot.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -92,6 +91,9 @@ public class UserDao{
         return null;
     }
     
+    /*
+     * 
+     * 
     public UserInfo findByOpenId(String openId) throws SQLException
     {
         Connection conn = null;
@@ -125,7 +127,8 @@ public class UserDao{
         }
         return userInfo;
     }
-
+    
+   
     public void update(UserInfo userInfo) throws SQLException
     {
         Connection conn = null;
@@ -152,9 +155,7 @@ public class UserDao{
         }        
     }
 
-    /*
-     * 
-     * 
+    
     public void delete(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;

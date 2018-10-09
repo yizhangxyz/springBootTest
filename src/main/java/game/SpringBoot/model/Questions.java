@@ -10,8 +10,7 @@ public class Questions
 {
 	private int questionId;
 	
-	private QuestionConfig questionConfig;
-
+	private QuestionConfig questionConfig = new QuestionConfig();
 
 	private List<QuestionDetail> questionDetails = new ArrayList<>();
 

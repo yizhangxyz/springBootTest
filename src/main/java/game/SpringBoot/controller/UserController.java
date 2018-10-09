@@ -69,10 +69,10 @@ public class UserController
 		messeDispatcher.registerMsg(ClientMessages.MSG_QUIZ_SUBMIT,  questionHandler, "onSubmitAnswers");
     }
 
-	@GetMapping("/testGetQuizInfo")
-	public String testGetQuizInfo()
+	@GetMapping("/test")
+	public String test()
 	{
-		return onUserAction("{\"msg_id\":2,\"msg_data\":{\"token\":\"d4e4d08fe2d647b8b1972a7b19054d23\"}}");
+		return onUserAction("{\"msg_id\":100,\"msg_data\":{\"token\":\"0c148139ff6747a98b02c53b5b430f42\"}}");
 	}
 	
 	@PostMapping("/userAction")

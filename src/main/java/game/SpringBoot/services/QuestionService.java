@@ -1,29 +1,52 @@
 package game.SpringBoot.services;
 
-import java.sql.SQLException;
 import java.util.List;
 
-import game.SpringBoot.dao.SubjectDao;
-import game.SpringBoot.model.QuestionResult;
+import org.apache.ibatis.session.SqlSession;
+
+import com.alibaba.fastjson.JSONObject;
+
+import game.SpringBoot.common.LogUtils;
+import game.SpringBoot.common.MybatisDBUtils;
 import game.SpringBoot.model.Questions;
+import game.SpringBoot.mybatis.beans.QuestionBean;
+import game.SpringBoot.mybatis.mapper.QuestionMapper;
 
 public class QuestionService
 {
-	private SubjectDao subjectDao = new SubjectDao();
 	
-	public Questions findByQuestionId(int id) throws SQLException
+	public Questions findByQuestionId(int id)
 	{
-		Questions questions = subjectDao.findQuestion(id);
+		Questions questions = new Questions();
 		
-		if(questions.getQuestionDetails().size() == 0)
-		{
-			return null;
-		}
-		
-		List<QuestionResult> results = subjectDao.findQuestionResult(id);
-		
-		questions.setQuestionResults(results);
-		
+		SqlSession session = MybatisDBUtils.getSession();
+        QuestionMapper mapper= session.getMapper(QuestionMapper.class);
+        try 
+        {
+        	List<QuestionBean> questionBeanList = mapper.findQuestionById(id);
+        	for(QuestionBean questionBean : questionBeanList)
+        	{
+        		questions.getQuestionDetails().add(questionBean.convertQuestionDetail());
+        	}
+        	
+        	//findQuestionResult
+        	
+            session.commit();
+        }
+        catch (Exception e) 
+        {
+        	e.printStackTrace();
+        	LogUtils.getLogger().error(e.getMessage());
+            session.rollback();
+        }
 		return questions;
+	}
+	
+	public static void main(String[] args)
+	{
+		QuestionService questionService = new QuestionService();
+		Questions questions = questionService.findByQuestionId(1);
+		
+		System.out.println(JSONObject.toJSONString(questions.getQuestionsView()));
 	}
 }
