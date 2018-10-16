@@ -195,7 +195,7 @@ public class DataImporter
 	{
 		DataImporter dataImporter = new DataImporter();
 		
-		int questionIds[] = {1,2};
+		int questionIds[] = {6};
 		for(int i=0;i<questionIds.length;i++)
 		{
 			int questionId = questionIds[i];

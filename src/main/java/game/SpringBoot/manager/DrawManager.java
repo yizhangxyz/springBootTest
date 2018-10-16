@@ -13,14 +13,11 @@ import game.SpringBoot.model.DrawResult;
 
 public class DrawManager
 {
-	static class DrawManagerHolder
-	{
-		static final DrawManager instance = new DrawManager();
-	}
+	static final DrawManager instance = new DrawManager();
 	
 	public static DrawManager getInstance()
 	{
-		return DrawManagerHolder.instance;
+		return instance;
 	}
 
 	private List<DrawResult> resultList = new ArrayList<>();
@@ -46,14 +43,10 @@ public class DrawManager
 			BufferedReader bf = new BufferedReader(isr);
 			String str;
 			
-			int count = 1;
 			while ((str = bf.readLine()) != null) 
 			{
 				DrawResult result = JSONObject.parseObject(str, DrawResult.class);
 				resultList.add(result);
-				System.out.println("========================================="+count);
-				System.out.println(result.story);
-				count++;
 			}
 			bf.close();
 			isr.close();

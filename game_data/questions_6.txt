@@ -1,0 +1,10 @@
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"愁眉苦脸*乐观开朗*不好说*","content":"平常你都是一个比较愁眉苦脸的人，还是乐观开朗的人呢？","nextQuestions":"2*4*3*","questionIndex":1,"score":100,"weights":"0*0*0*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"是的*不是的*偶尔是*","content":"你做事是不是都特别的有规划呢？","nextQuestions":"4*3*6*","questionIndex":2,"score":100,"weights":"0*0*0*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"特别的好*一般般*很不好*","content":"你跟家庭成员的关系都怎么样呢？","nextQuestions":"4*7*5*","questionIndex":3,"score":100,"weights":"0*0*0*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"上游*中游*下游*","content":"你的学习成绩处在班级的什么位置呢？","nextQuestions":"6*7*8*","questionIndex":4,"score":100,"weights":"0*0*0*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"会的*不会*偶尔会*","content":"看到有人在大家，你会冲进去围观吗？","nextQuestions":"7*8*6*","questionIndex":5,"score":100,"weights":"0*0*0*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"是的*不是*偶尔是*","content":"你觉得父母对自己特别的严厉，是不是？","nextQuestions":"9*7*10*","questionIndex":6,"score":100,"weights":"0*0*0*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"挺经常的*基本没有*偶尔会联系*","content":"你会经常跟自己的那些老同学，老朋友联系吗？","nextQuestions":"8*10*9*","questionIndex":7,"score":100,"weights":"0*0*10*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"是的*都没有*只有一样*","content":"你是有车有房一族吗？","nextQuestions":"0*9*10*","questionIndex":8,"score":100,"weights":"10*0*0*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"是的*不是的*不好说*","content":"你是那种打击越大，就越是有干劲的人吗？","nextQuestions":"0*0*10*","questionIndex":9,"score":100,"weights":"20*30*0*"}
+{"analizer":1,"answerCount":3,"answerType":0,"answers":"是的*不是*看情况*","content":"遇到麻烦的时候，你会第一时间想要去向别人求助吗？","nextQuestions":"0*0*0*","questionIndex":10,"score":100,"weights":"40*20*30*"}

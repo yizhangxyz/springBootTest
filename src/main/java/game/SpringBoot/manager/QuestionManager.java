@@ -82,7 +82,14 @@ public class QuestionManager
             String[] ids = questions.split(",");
             for(String id : ids)
             {
-            	loadQuestions(questionsTemp,Integer.parseInt(id));
+            	if(id.indexOf('-') > 0)
+            	{
+            		loadQuestions(questionsTemp,id);
+            	}
+            	else
+            	{
+            		loadQuestions(questionsTemp,Integer.parseInt(id));
+            	}
             }
             
             synchronized (questionsMap)
@@ -141,6 +148,20 @@ public class QuestionManager
 		}
 		
 		return questions;
+	}
+	
+	private void loadQuestions(Map<Integer, Questions> map,String questionIdRange)
+	{
+		String[] idRange = questionIdRange.split("-");
+		if(idRange.length == 2)
+		{
+			int idMin = Integer.parseInt(idRange[0]);
+			int idMax = Integer.parseInt(idRange[1]);
+			for(int i=idMin;i<=idMax;i++)
+			{
+				loadQuestions(map,i);
+			}
+		}
 	}
 	
 	private void loadQuestions(Map<Integer, Questions> map,int questionId)
